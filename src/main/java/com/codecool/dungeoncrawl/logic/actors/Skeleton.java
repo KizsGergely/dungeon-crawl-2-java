@@ -6,7 +6,6 @@ import com.codecool.dungeoncrawl.logic.Direction;
 import java.util.Random;
 
 public class Skeleton extends Actor {
-    private Direction direction;
     public Skeleton(Cell cell) {
         super(cell);
     }

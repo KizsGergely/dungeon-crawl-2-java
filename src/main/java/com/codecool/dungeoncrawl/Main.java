@@ -75,6 +75,7 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        moveMonsters();
         switch (keyEvent.getCode()) {
             case UP:
                 player.move(0, -1);
@@ -93,8 +94,6 @@ public class Main extends Application {
                 refresh();
                 break;
         }
-        moveMonsters();
-        refresh();
     }
 
     private void groupMonsters() {

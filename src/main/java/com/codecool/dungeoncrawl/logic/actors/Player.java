@@ -20,6 +20,7 @@ public class Player extends Actor {
     public void move(int dx, int dy) {
         canPickupItem = false;
         Cell nextCell = cell.getNeighbor(dx, dy);
+        attackIfEncounter(nextCell);
         if (nextCell.getType() != CellType.WALL &&
                 nextCell.getActor() == null) {
             nextCell.setActor(this);
@@ -34,6 +35,13 @@ public class Player extends Actor {
     public void pickupItem() {
         inventory.addItem(cell.getItem());
         cell.setItem(null);
+    }
+
+    private void attackIfEncounter(Cell nextCell) {
+        if (nextCell.getActor() != null) {
+            nextCell.getActor().changeHealth(-5);
+            this.changeHealth(-2);
+        }
     }
 
     public Inventory getInventory() {

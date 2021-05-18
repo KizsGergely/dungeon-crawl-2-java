@@ -3,12 +3,15 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import com.codecool.dungeoncrawl.logic.items.Inventory;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -24,8 +27,15 @@ public class Main extends Application {
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
+    GridPane ui = new GridPane();
     Label healthLabel = new Label();
     ArrayList<Skeleton> skeletons = new ArrayList<>();
+    Player player = map.getPlayer();
+    Inventory inventory = player.getInventory();
+    Label inventoryLabel = new Label(inventory.toString());
+    Label pickupLabel = new Label("Pick up?");
+    Button yesPickupButton = new Button("Yes");
+    Button noPickupButton = new Button("No");
 
     public static void main(String[] args) {
         launch(args);
@@ -33,12 +43,18 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        GridPane ui = new GridPane();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
 
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
+        ui.add(new Label("------------"), 0, 1);
+        ui.add(pickupLabel, 0, 3);
+        ui.add(yesPickupButton, 0,4);
+        ui.add(noPickupButton, 1, 4);
+        setPickupVisibility(false);
+        ui.add(new Label("Inventory: "), 0, 5);
+        ui.add(inventoryLabel, 1, 6);
 
         BorderPane borderPane = new BorderPane();
 
@@ -53,24 +69,25 @@ public class Main extends Application {
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
         groupSkeletons();
+        primaryStage.requestFocus();
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
             case UP:
-                map.getPlayer().move(0, -1);
+                player.move(0, -1);
                 refresh();
                 break;
             case DOWN:
-                map.getPlayer().move(0, 1);
+                player.move(0, 1);
                 refresh();
                 break;
             case LEFT:
-                map.getPlayer().move(-1, 0);
+                player.move(-1, 0);
                 refresh();
                 break;
             case RIGHT:
-                map.getPlayer().move(1,0);
+                player.move(1,0);
                 refresh();
                 break;
         }
@@ -111,6 +128,26 @@ public class Main extends Application {
                 }
             }
         }
+        if (player.canPickup()) pickup();
+        inventoryLabel.setText(map.getPlayer().getInventory().toString());
         healthLabel.setText("" + map.getPlayer().getHealth());
+    }
+
+    public void pickup() {
+        setPickupVisibility(true);
+        yesPickupButton.setOnAction(event -> {
+            player.pickupItem();
+            refresh();
+            setPickupVisibility(false);
+        });
+        noPickupButton.setOnAction(event -> {
+            setPickupVisibility(false);
+        });
+    }
+
+    private void setPickupVisibility(boolean state) {
+        pickupLabel.setVisible(state);
+        yesPickupButton.setVisible(state);
+        noPickupButton.setVisible(state);
     }
 }

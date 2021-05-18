@@ -10,7 +10,7 @@ import java.util.Random;
 public abstract class Actor implements Drawable {
     protected Random random = new Random();
     protected Direction direction;
-    private Cell cell;
+    protected Cell cell;
     private int health = 10;
 
     public Actor(Cell cell) {

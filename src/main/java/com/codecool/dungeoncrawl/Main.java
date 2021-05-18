@@ -99,7 +99,7 @@ public class Main extends Application {
             skeleton.moveRandomly();
         }
         for (Ghost ghost: ghosts) {
-            ghost.moveRandomly();
+            ghost.moveGhostRandomly(map.getWidth(), map.getHeight());
         }
     }
 

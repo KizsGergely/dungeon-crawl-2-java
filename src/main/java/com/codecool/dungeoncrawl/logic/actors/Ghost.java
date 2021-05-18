@@ -5,7 +5,6 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Direction;
 
 public class Ghost extends Actor{
-	private Cell cell = getCell();
 	public Ghost(Cell cell) {
 		super(cell);
 	}
@@ -15,19 +14,25 @@ public class Ghost extends Actor{
 		return "ghost";
 	}
 
-	private void moveGhost(int dx, int dy) {
-		Cell nextCell = cell.getNeighbor(dx, dy);
-		if (nextCell.getActor() == null) {
-			cell.setActor(null);
-			nextCell.setActor(this);
-			cell = nextCell;
+	private void moveGhost(int dx, int dy, int width, int height) {
+		int currentX = this.getX();
+		int currentY = this.getY();
+		if (currentX + dx < width &&
+			currentX + dx >= 0 &&
+			currentY + dy < height &&
+			currentY + dy >= 0) {
+			Cell nextCell = cell.getNeighbor(dx, dy);
+			if (nextCell.getActor() == null) {
+				cell.setActor(null);
+				nextCell.setActor(this);
+				cell = nextCell;
+			}
 		}
 	}
 
-	@Override
-	public void moveRandomly() {
+	public void moveGhostRandomly(int width, int height) {
 		direction = Direction.values()[random.nextInt(4)];
-		moveGhost(direction.getDx(), direction.getDy());
+		moveGhost(direction.getDx(), direction.getDy(), width, height);
 	}
 
 }

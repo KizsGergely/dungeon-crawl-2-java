@@ -111,20 +111,40 @@ public class Main extends Application {
     }
 
     private void removeMonstersIfDead(ArrayList<Skeleton> skeletons, ArrayList<Ghost> ghosts, ArrayList<Enemy> enemies) {
-        for (Skeleton skeleton: skeletons) {
-            if (skeleton.checkIfDead()) {
-                skeleton.getCell().setActor(null);
+        int skeletonIndex = -1;
+        int ghostIndex = -1;
+        int enemyIndex = -1;
+        // remove monster from map
+        for (int i = 0; i < skeletons.size(); i++) {
+            if (skeletons.get(i).checkIfDead()) {
+                skeletons.get(i).getCell().setActor(null);
+                skeletonIndex = i;
+                break;
             }
         }
-        for (Ghost ghost: ghosts) {
-            if (ghost.checkIfDead()) {
-                ghost.getCell().setActor(null);
+        for (int i = 0; i < ghosts.size(); i++) {
+            if (ghosts.get(i).checkIfDead()) {
+                ghosts.get(i).getCell().setActor(null);
+                ghostIndex = i;
+                break;
             }
         }
-        for (Enemy enemy: enemies) {
-            if (enemy.checkIfDead()) {
-                enemy.getCell().setActor(null);
+        for (int i = 0; i < enemies.size(); i++) {
+            if (enemies.get(i).checkIfDead()) {
+                enemies.get(i).getCell().setActor(null);
+                enemyIndex = i;
+                break;
             }
+        }
+        // remove monster from the list where it is collected with the other similar monsters
+        if (skeletonIndex > -1) {
+            skeletons.remove(skeletonIndex);
+        }
+        if (ghostIndex > -1) {
+            ghosts.remove(ghostIndex);
+        }
+        if (enemyIndex > -1) {
+            enemies.remove(enemyIndex);
         }
     }
 

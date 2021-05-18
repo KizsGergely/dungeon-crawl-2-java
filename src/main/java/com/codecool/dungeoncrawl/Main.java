@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -15,6 +16,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
     Canvas canvas = new Canvas(
@@ -22,6 +25,7 @@ public class Main extends Application {
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
+    ArrayList<Skeleton> skeletons = new ArrayList<>();
 
     public static void main(String[] args) {
         launch(args);
@@ -48,6 +52,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
+        groupSkeletons();
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -57,7 +62,7 @@ public class Main extends Application {
                 refresh();
                 break;
             case DOWN:
-                map.getPlayer().move(0, 1);
+                map.getPlayer().move(0, 1);;
                 refresh();
                 break;
             case LEFT:
@@ -68,6 +73,26 @@ public class Main extends Application {
                 map.getPlayer().move(1,0);
                 refresh();
                 break;
+        }
+        moveSkeletons();
+        refresh();
+    }
+
+    private void groupSkeletons() {
+        for (int y = 0; y < map.getHeight(); y++) {
+            for (int x = 0; x <map.getWidth(); x++) {
+                if (map.getCell(x,y).getActor() != null) {
+                    if (map.getCell(x,y).getActor().getTileName().equals("skeleton")) {
+                        skeletons.add((Skeleton) map.getCell(x,y).getActor());
+                    }
+                }
+            }
+        }
+    }
+
+    private void moveSkeletons() {
+        for (Skeleton skeleton: skeletons) {
+            skeleton.moveSkeleton();
         }
     }
 

@@ -62,7 +62,7 @@ public class Main extends Application {
                 refresh();
                 break;
             case DOWN:
-                map.getPlayer().move(0, 1);;
+                map.getPlayer().move(0, 1);
                 refresh();
                 break;
             case LEFT:

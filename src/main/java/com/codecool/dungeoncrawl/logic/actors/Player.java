@@ -5,13 +5,11 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.Inventory;
 
 public class Player extends Actor {
-    private Cell cell;
     private Inventory inventory = new Inventory();
     private boolean canPickupItem = false;
 
     public Player(Cell cell) {
         super(cell);
-        this.cell = cell;
     }
 
     public String getTileName() {

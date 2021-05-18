@@ -5,7 +5,10 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Direction;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
+import java.util.Random;
+
 public abstract class Actor implements Drawable {
+    protected Random random = new Random();
     protected Direction direction;
     private Cell cell;
     private int health = 10;
@@ -23,6 +26,11 @@ public abstract class Actor implements Drawable {
             nextCell.setActor(this);
             cell = nextCell;
         }
+    }
+
+    public void moveRandomly() {
+        direction = Direction.values()[random.nextInt(4)];
+        move(direction.getDx(), direction.getDy());
     }
 
     public int getHealth() {

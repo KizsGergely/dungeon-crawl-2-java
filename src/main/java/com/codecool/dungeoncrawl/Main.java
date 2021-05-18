@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -26,6 +27,7 @@ public class Main extends Application {
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     ArrayList<Skeleton> skeletons = new ArrayList<>();
+    ArrayList<Ghost> ghosts = new ArrayList<>();
 
     public static void main(String[] args) {
         launch(args);
@@ -52,7 +54,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
-        groupSkeletons();
+        groupMonsters();
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -74,25 +76,30 @@ public class Main extends Application {
                 refresh();
                 break;
         }
-        moveSkeletons();
+        moveMonsters();
         refresh();
     }
 
-    private void groupSkeletons() {
+    private void groupMonsters() {
         for (int y = 0; y < map.getHeight(); y++) {
             for (int x = 0; x <map.getWidth(); x++) {
                 if (map.getCell(x,y).getActor() != null) {
                     if (map.getCell(x,y).getActor().getTileName().equals("skeleton")) {
                         skeletons.add((Skeleton) map.getCell(x,y).getActor());
+                    } else if (map.getCell(x,y).getActor().getTileName().equals("ghost")) {
+                        ghosts.add((Ghost) map.getCell(x,y).getActor());
                     }
                 }
             }
         }
     }
 
-    private void moveSkeletons() {
+    private void moveMonsters() {
         for (Skeleton skeleton: skeletons) {
-            skeleton.moveSkeleton();
+            skeleton.moveRandomly();
+        }
+        for (Ghost ghost: ghosts) {
+            ghost.moveRandomly();
         }
     }
 

@@ -15,9 +15,4 @@ public class Skeleton extends Actor {
         return "skeleton";
     }
 
-    public void moveSkeleton() {
-        Random random = new Random();
-        direction = Direction.values()[random.nextInt(4)];
-        move(direction.getDx(), direction.getDy());
-    }
 }

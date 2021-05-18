@@ -97,9 +97,17 @@ public class Main extends Application {
         }
         player.attackIfEncounter(dx, dy);
         removeMonstersIfDead(skeletons, ghosts, enemies);
+        restartGameIfDead();
         player.move(dx, dy);
         refresh();
 
+    }
+
+    private void restartGameIfDead() {
+        // now it just exits
+        if (player.checkIfDead()) {
+            System.exit(0);
+        }
     }
 
     private void removeMonstersIfDead(ArrayList<Skeleton> skeletons, ArrayList<Ghost> ghosts, ArrayList<Enemy> enemies) {

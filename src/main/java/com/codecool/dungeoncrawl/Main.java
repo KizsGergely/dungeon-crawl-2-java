@@ -3,9 +3,7 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
-import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.logic.actors.Ghost;
-import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.items.Inventory;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -20,7 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
@@ -32,6 +30,7 @@ public class Main extends Application {
     Label healthLabel = new Label();
     ArrayList<Skeleton> skeletons = new ArrayList<>();
     ArrayList<Ghost> ghosts = new ArrayList<>();
+    ArrayList<Enemy> enemies = new ArrayList<>();
     Player player = map.getPlayer();
     Inventory inventory = player.getInventory();
     Label inventoryLabel = new Label(inventory.toString());
@@ -75,24 +74,49 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        int dx = 0;
+        int dy = 0;
         moveMonsters();
         switch (keyEvent.getCode()) {
             case UP:
-                player.move(0, -1);
-                refresh();
+                dx = 0;
+                dy = -1;
                 break;
             case DOWN:
-                player.move(0, 1);
-                refresh();
+                dx = 0;
+                dy = 1;
                 break;
             case LEFT:
-                player.move(-1, 0);
-                refresh();
+                dx = -1;
+                dy = 0;
                 break;
             case RIGHT:
-                player.move(1,0);
-                refresh();
+                dx = 1;
+                dy = 0;
                 break;
+        }
+        player.attackIfEncounter(dx, dy);
+        removeMonstersIfDead(skeletons, ghosts, enemies);
+        player.move(dx, dy);
+        refresh();
+
+    }
+
+    private void removeMonstersIfDead(ArrayList<Skeleton> skeletons, ArrayList<Ghost> ghosts, ArrayList<Enemy> enemies) {
+        for (Skeleton skeleton: skeletons) {
+            if (skeleton.checkIfDead()) {
+                skeleton.getCell().setActor(null);
+            }
+        }
+        for (Ghost ghost: ghosts) {
+            if (ghost.checkIfDead()) {
+                ghost.getCell().setActor(null);
+            }
+        }
+        for (Enemy enemy: enemies) {
+            if (enemy.checkIfDead()) {
+                enemy.getCell().setActor(null);
+            }
         }
     }
 
@@ -104,6 +128,8 @@ public class Main extends Application {
                         skeletons.add((Skeleton) map.getCell(x,y).getActor());
                     } else if (map.getCell(x,y).getActor().getTileName().equals("ghost")) {
                         ghosts.add((Ghost) map.getCell(x,y).getActor());
+                    } else if (map.getCell(x,y).getActor().getTileName().equals("enemy")) {
+                        enemies.add((Enemy) map.getCell(x,y).getActor());
                     }
                 }
             }

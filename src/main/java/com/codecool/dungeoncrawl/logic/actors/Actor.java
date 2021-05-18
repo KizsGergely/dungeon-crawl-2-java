@@ -41,6 +41,10 @@ public abstract class Actor implements Drawable {
         this.health = health + dh;
     }
 
+    public boolean checkIfDead() {
+        return getHealth() <= 0;
+    }
+
     public Cell getCell() {
         return cell;
     }

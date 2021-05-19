@@ -13,9 +13,27 @@ public class Scrub extends Actor{
 		return "Scrub";
 	}
 
-	public void moveScrubAround(int width, int height) {
-		direction = Direction.values()[random.nextInt(4)];
-		moveActors(direction.getDx(), direction.getDy(), width, height);
+	public void moveScrub(int playerX, int playerY) {
+		int scrubX = this.getX();
+		int scrubY = this.getY();
+		int distanceX = scrubX - playerX;
+		int distanceY = scrubY - playerY;
+
+		if (Math.abs(distanceX) < Math.abs(distanceY) || distanceX == 0) {
+			if (distanceY < 0) {
+				direction = Direction.SOUTH;
+			} else {
+				direction = Direction.NORTH;
+			}
+		} else if (Math.abs(distanceX) > Math.abs(distanceY) || distanceY == 0
+			|| distanceX == distanceY){
+			if (distanceX < 0) {
+				direction = Direction.EAST;
+			} else {
+				direction = Direction.WEST;
+			}
+		}
+		move(direction.getDx(), direction.getDy());
 	}
 
 }

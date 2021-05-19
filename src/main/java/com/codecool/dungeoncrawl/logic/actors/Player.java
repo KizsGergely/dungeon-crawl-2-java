@@ -3,6 +3,8 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.environment.CuttedGrass;
+import com.codecool.dungeoncrawl.logic.environment.Environment;
+import com.codecool.dungeoncrawl.logic.environment.Grass;
 import com.codecool.dungeoncrawl.logic.items.*;
 
 public class Player extends Actor {
@@ -37,6 +39,7 @@ public class Player extends Actor {
             cell = nextCell;
             if (!isFighting) opponent = null;
         }
+        mowTheLawn();
     }
 
     public void pickupItem() {
@@ -97,5 +100,11 @@ public class Player extends Actor {
 
     public boolean hasTorch() {
         return hasTorch;
+    }
+    public void mowTheLawn() {
+        Environment floor = cell.getEnvironment();
+        if (floor instanceof Grass) {
+            cell.setEnvironment(new CuttedGrass(cell));
+        }
     }
 }

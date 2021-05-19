@@ -5,7 +5,7 @@ import com.codecool.dungeoncrawl.logic.Direction;
 
 import java.util.Random;
 
-public class Skeleton extends Actor {
+public class Cat extends Actor {
 
     public Skeleton(Cell cell) {
         super(cell);

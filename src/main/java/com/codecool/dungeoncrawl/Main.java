@@ -221,6 +221,8 @@ public class Main extends Application {
                     Tiles.drawTile(context, cell.getActor(), x - minX, y-minY);
                 } else if (cell.getItem() != null) {
                     Tiles.drawTile(context, cell.getItem(), x - minX, y - minY);
+                } else if (cell.getEnvironment() != null) {
+                    Tiles.drawTile(context, cell.getEnvironment(), x - minX, y - minY);
                 } else {
                     Tiles.drawTile(context, cell, x - minX, y - minY);
                 }

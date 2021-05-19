@@ -2,11 +2,13 @@ package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.environment.Environment;
 
 public class Cell implements Drawable {
     private CellType type;
     private Actor actor;
     private Item item;
+    private Environment environment;
     private GameMap gameMap;
     private int x, y;
 
@@ -39,6 +41,14 @@ public class Cell implements Drawable {
 
     public Item getItem() {
         return item;
+    }
+
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+
+    public Environment getEnvironment() {
+        return environment;
     }
 
     public Cell getNeighbor(int dx, int dy) {

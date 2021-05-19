@@ -37,6 +37,8 @@ public class Main extends Application {
     Label pickupLabel = new Label("Pick up?");
     Button yesPickupButton = new Button("Yes");
     Button noPickupButton = new Button("No");
+    int viewHorizontal = 17;
+    int viewVertical = 13;
 
     public static void main(String[] args) {
         launch(args);
@@ -176,15 +178,26 @@ public class Main extends Application {
     private void refresh() {
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        int minX = Math.max(map.getPlayer().getX() - viewHorizontal, 0);
+        int maxX = Math.min(map.getWidth(),map.getPlayer().getX() + viewHorizontal);
+        int minY = Math.max(map.getPlayer().getY() - viewVertical, 0);
+        int maxY = Math.min(map.getHeight(),map.getPlayer().getY() + viewVertical);
+
+        if(minX == 0) maxX = Math.min(2 * viewHorizontal + 1, map.getWidth() -1);
+        if(minY == 0) maxY = Math.min(2 * viewVertical + 1, map.getHeight() -1);
+        if(maxX == map.getWidth() - 1) minX = Math.max(map.getWidth() - 2 - viewHorizontal * 2, 0);
+        if(maxY == map.getHeight() - 1) minY = Math.max(map.getHeight() - 2 - viewVertical * 2, 0);
+
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
-                    Tiles.drawTile(context, cell.getActor(), x, y);
+                    Tiles.drawTile(context, cell.getActor(), x - minX, y-minY);
                 } else if (cell.getItem() != null) {
-                    Tiles.drawTile(context, cell.getItem(), x, y);
+                    Tiles.drawTile(context, cell.getItem(), x - minX, y - minY);
                 } else {
-                    Tiles.drawTile(context, cell, x, y);
+                    Tiles.drawTile(context, cell, x - minX, y - minY);
                 }
             }
         }

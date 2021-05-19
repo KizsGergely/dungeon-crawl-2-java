@@ -3,7 +3,7 @@ package com.codecool.dungeoncrawl.logic.environment;
 import com.codecool.dungeoncrawl.logic.Cell;
 
 public class CellarDoor extends Environment {
-    private boolean isOpen = true;
+    private boolean isOpen = false;
 
     public CellarDoor(Cell cell) {
         super(cell);

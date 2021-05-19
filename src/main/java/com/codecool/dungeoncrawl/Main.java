@@ -4,6 +4,8 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.*;
+import com.codecool.dungeoncrawl.logic.environment.CellarDoor;
+import com.codecool.dungeoncrawl.logic.environment.GardenDoor;
 import com.codecool.dungeoncrawl.logic.items.Inventory;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -21,7 +23,8 @@ import javafx.stage.Stage;
 import java.util.*;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap();
+    int level = 1;
+    GameMap map = MapLoader.loadMap(level);
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
@@ -206,20 +209,28 @@ public class Main extends Application {
                 }
             }
         }
+
         if (player.canPickup()) pickup();
         inventoryLabel.setText(player.getInventory().toString());
         getPlayerStats();
         if (player.isFighting()) getMonsterStats();
         else hideMonsterStats();
+        level = player.getLevelNumber();
+        if (player.canGoToCellar()) changeMapToCellar();
+
     }
+
     private void pickup() {
         setPickupVisibility(true);
         yesPickupButton.setOnAction(event -> {
             player.pickupItem();
+            if (player.hasCellarKey()) openCellarDoor();
+            if (player.hasGardenKey()) openGardenDoor();
             refresh();
             setPickupVisibility(false);
         });
         noPickupButton.setOnAction(event -> setPickupVisibility(false));
+
     }
 
     private void setPickupVisibility(boolean state) {
@@ -254,4 +265,32 @@ public class Main extends Application {
         monsterDefenseLabel.setText("");
         textLabel.setText("");
     }
+
+    private void openCellarDoor() {
+        for (int y = 0; y < map.getHeight(); y++) {
+            for (int x = 0; x <map.getWidth(); x++) {
+                if (map.getCell(x,y).getEnvironment() instanceof CellarDoor) {
+                    ((CellarDoor) map.getCell(x,y).getEnvironment()).setOpen();
+                }
+            }
+        }
+    }
+
+    private void openGardenDoor() {
+        for (int y = 0; y < map.getHeight(); y++) {
+            for (int x = 0; x <map.getWidth(); x++) {
+                if (map.getCell(x,y).getEnvironment() instanceof GardenDoor) {
+                    ((GardenDoor) map.getCell(x,y).getEnvironment()).setOpen();
+                }
+            }
+        }
+    }
+
+    private void changeMapToCellar() {
+        map = MapLoader.loadMap(level);
+    }
+
+//    private void mapChanger() {
+//        map = level == 1 ? map1 : map2;
+//    }
 }

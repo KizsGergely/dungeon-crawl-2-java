@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Cat extends Actor {
 
-    public Skeleton(Cell cell) {
+    public Cat(Cell cell) {
         super(cell);
         health = 8;
         attack = 4;
@@ -16,7 +16,7 @@ public class Cat extends Actor {
 
     @Override
     public String getTileName() {
-        return "Skeleton";
+        return "Cat";
     }
 
 }

@@ -2,7 +2,9 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
+import com.codecool.dungeoncrawl.logic.items.Cheese;
 import com.codecool.dungeoncrawl.logic.items.Inventory;
+import com.codecool.dungeoncrawl.logic.items.Sword;
 
 public class Player extends Actor {
     private Inventory inventory = new Inventory();
@@ -38,6 +40,8 @@ public class Player extends Actor {
     }
 
     public void pickupItem() {
+        if (cell.getItem() instanceof Sword) attack += 3;
+        if (cell.getItem() instanceof Cheese) health += 2;
         inventory.addItem(cell.getItem());
         cell.setItem(null);
     }
@@ -48,10 +52,14 @@ public class Player extends Actor {
         if (monster != null) {
             isFighting = true;
             opponent = monster;
-            monster.changeHealth(-5);
+            int hit = monster.defense - attack;
+            if (hit < 0) hit = Math.abs(hit);
+            monster.changeHealth(-hit);
             // if monster is not dead yet, it will attack back
             if (!monster.checkIfDead()) {
-                this.changeHealth(-2);
+                int hitBack = monster.attack - defense;
+                if (hitBack <= 0) hitBack = 0;
+                this.changeHealth(-hitBack);
             } else {
                 isKilledAMonster = true;
                 killedMonsterName = monster.getTileName();

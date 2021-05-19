@@ -30,6 +30,21 @@ public abstract class Actor implements Drawable {
             cell = nextCell;
         }
     }
+    public void moveActors(int dx, int dy, int width, int height) {
+        int currentX = this.getX();
+        int currentY = this.getY();
+        if (currentX + dx < width &&
+                currentX + dx >= 0 &&
+                currentY + dy < height &&
+                currentY + dy >= 0) {
+            Cell nextCell = cell.getNeighbor(dx, dy);
+            if (nextCell.getActor() == null) {
+                cell.setActor(null);
+                nextCell.setActor(this);
+                cell = nextCell;
+            }
+        }
+    }
 
     public void moveRandomly() {
         direction = Direction.values()[random.nextInt(4)];

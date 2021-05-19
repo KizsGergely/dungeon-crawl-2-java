@@ -83,7 +83,7 @@ public class Tiles {
         tileMap.put("pear", new Tile(16, 29)); // p
         tileMap.put("carrot", new Tile(18, 30)); // r
         tileMap.put("ring", new Tile(14, 28)); // ¤
-        tileMap.put("scrub", new Tile(24, 1)); // &
+        tileMap.put("Scrub", new Tile(24, 1)); // &
 
     }
 

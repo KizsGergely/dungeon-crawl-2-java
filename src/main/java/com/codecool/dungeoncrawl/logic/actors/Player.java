@@ -5,9 +5,11 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.Cheese;
 import com.codecool.dungeoncrawl.logic.items.Inventory;
 import com.codecool.dungeoncrawl.logic.items.Sword;
+import com.codecool.dungeoncrawl.logic.items.Torch;
 
 public class Player extends Actor {
     private Inventory inventory = new Inventory();
+    private boolean hasTorch = false;
     private boolean canPickupItem = false;
     private boolean isFighting = false;
     private boolean isKilledAMonster = false;
@@ -42,6 +44,7 @@ public class Player extends Actor {
     public void pickupItem() {
         if (cell.getItem() instanceof Sword) attack += 3;
         if (cell.getItem() instanceof Cheese) health += 2;
+        if (cell.getItem() instanceof Torch) hasTorch = true;
         inventory.addItem(cell.getItem());
         cell.setItem(null);
     }
@@ -85,4 +88,8 @@ public class Player extends Actor {
     public boolean isKilledAMonster() { return isKilledAMonster; }
 
     public String getKilledMonsterName() { return killedMonsterName; }
+
+    public boolean hasTorch() {
+        return hasTorch;
+    }
 }

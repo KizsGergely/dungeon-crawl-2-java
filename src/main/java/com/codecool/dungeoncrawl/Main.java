@@ -191,7 +191,7 @@ public class Main extends Application {
             ghost.moveGhostRandomly(map.getWidth(), map.getHeight());
         }
         for (Scrub scrub: scrubs) {
-            scrub.moveScrub(player.getX(), player.getY());
+            scrub.moveScrub(player.getX(), player.getY(), player.hasTorch());
         }
     }
 

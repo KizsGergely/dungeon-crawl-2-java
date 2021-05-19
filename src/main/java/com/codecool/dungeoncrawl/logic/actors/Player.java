@@ -2,10 +2,7 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.items.Cheese;
-import com.codecool.dungeoncrawl.logic.items.Inventory;
-import com.codecool.dungeoncrawl.logic.items.Sword;
-import com.codecool.dungeoncrawl.logic.items.Torch;
+import com.codecool.dungeoncrawl.logic.items.*;
 
 public class Player extends Actor {
     private Inventory inventory = new Inventory();
@@ -42,8 +39,9 @@ public class Player extends Actor {
     }
 
     public void pickupItem() {
-        if (cell.getItem() instanceof Sword) attack += 3;
-        if (cell.getItem() instanceof Cheese) health += 2;
+        if (cell.getItem() instanceof Apple || cell.getItem() instanceof Pear) health += 4;
+        if (cell.getItem() instanceof Carrot) health += 3;
+        if (cell.getItem() instanceof Cheese || cell.getItem() instanceof Bread) health += 2;
         if (cell.getItem() instanceof Torch) hasTorch = true;
         inventory.addItem(cell.getItem());
         cell.setItem(null);

@@ -37,7 +37,7 @@ public class MapLoader {
                         case '.':
                             cell.setType(CellType.FLOOR);
                             break;
-                        case 's':
+                        case 'S':
                             cell.setType(CellType.FLOOR);
                             new Skeleton(cell);
                             break;
@@ -53,15 +53,15 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             new Cheese(cell);
                             break;
-                        case 'S':
+                        case 's':
                             cell.setType(CellType.FLOOR);
                             new Sword(cell);
                             break;
-                        case 'g':
+                        case 'G':
                             cell.setType(CellType.FLOOR);
                             new Ghost(cell);
                             break;
-                        case 'e':
+                        case 'E':
                             cell.setType(CellType.FLOOR);
                             new Enemy(cell);
                             break;

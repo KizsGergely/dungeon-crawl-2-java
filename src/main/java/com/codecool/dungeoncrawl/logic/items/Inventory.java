@@ -25,7 +25,7 @@ public class Inventory {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (String item: inventory.keySet()) {
-            sb.append(item).append(": ").append(inventory.get(item)).append("\n");
+            sb.append("- ").append(item).append(": ").append(inventory.get(item)).append("\n");
         }
         return sb.toString();
     }

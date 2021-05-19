@@ -11,7 +11,10 @@ public abstract class Actor implements Drawable {
     protected Random random = new Random();
     protected Direction direction;
     protected Cell cell;
-    private int health = 10;
+    protected String name;
+    protected int health = 10;
+    protected int attack = 5;
+    protected int defense = 5;
 
     public Actor(Cell cell) {
         this.cell = cell;
@@ -33,8 +36,20 @@ public abstract class Actor implements Drawable {
         move(direction.getDx(), direction.getDy());
     }
 
+    public String getName() {
+        return name;
+    }
+
     public int getHealth() {
         return health;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public int getDefense() {
+        return defense;
     }
 
     public void changeHealth(int dh) {

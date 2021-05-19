@@ -7,9 +7,14 @@ import com.codecool.dungeoncrawl.logic.items.Inventory;
 public class Player extends Actor {
     private Inventory inventory = new Inventory();
     private boolean canPickupItem = false;
+    private boolean isFighting = false;
+    private boolean isKilledAMonster = false;
+    private String killedMonsterName;
+    private Actor opponent;
 
     public Player(Cell cell) {
         super(cell);
+        name = "Player";
     }
 
     public String getTileName() {
@@ -28,6 +33,7 @@ public class Player extends Actor {
             }
             cell.setActor(null);
             cell = nextCell;
+            if (!isFighting) opponent = null;
         }
     }
 
@@ -40,11 +46,19 @@ public class Player extends Actor {
         Cell nextCell = cell.getNeighbor(dx, dy);
         Actor monster = nextCell.getActor();
         if (monster != null) {
+            isFighting = true;
+            opponent = monster;
             monster.changeHealth(-5);
             // if monster is not dead yet, it will attack back
             if (!monster.checkIfDead()) {
                 this.changeHealth(-2);
+            } else {
+                isKilledAMonster = true;
+                killedMonsterName = monster.getTileName();
             }
+        } else {
+            isFighting = false;
+            isKilledAMonster = false;
         }
     }
 
@@ -55,4 +69,12 @@ public class Player extends Actor {
     public boolean canPickup() {
         return canPickupItem;
     }
+
+    public boolean isFighting() { return isFighting; }
+
+    public Actor getOpponent() { return opponent; }
+
+    public boolean isKilledAMonster() { return isKilledAMonster; }
+
+    public String getKilledMonsterName() { return killedMonsterName; }
 }

@@ -11,7 +11,7 @@ public class Ghost extends Actor{
 
 	@Override
 	public String getTileName() {
-		return "ghost";
+		return "Ghost";
 	}
 
 	private void moveGhost(int dx, int dy, int width, int height) {

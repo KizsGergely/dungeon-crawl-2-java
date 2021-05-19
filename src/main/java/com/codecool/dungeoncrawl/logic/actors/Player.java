@@ -2,9 +2,7 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.items.Cheese;
-import com.codecool.dungeoncrawl.logic.items.Inventory;
-import com.codecool.dungeoncrawl.logic.items.Sword;
+import com.codecool.dungeoncrawl.logic.items.*;
 
 public class Player extends Actor {
     private Inventory inventory = new Inventory();
@@ -29,19 +27,23 @@ public class Player extends Actor {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (nextCell.getType() != CellType.WALL &&
                 nextCell.getActor() == null) {
-            nextCell.setActor(this);
-            if (nextCell.getItem() != null) {
-                canPickupItem = true;
+            if (!(nextCell.getType() == CellType.DOOR && !nextCell.getEnvironment().isAnOpenDoor())) {
+                nextCell.setActor(this);
+                if (nextCell.getItem() != null) {
+                    canPickupItem = true;
+                }
+                cell.setActor(null);
+                cell = nextCell;
+                if (!isFighting) opponent = null;
             }
-            cell.setActor(null);
-            cell = nextCell;
-            if (!isFighting) opponent = null;
         }
     }
 
     public void pickupItem() {
         if (cell.getItem() instanceof Sword) attack += 3;
         if (cell.getItem() instanceof Cheese) health += 2;
+        if (cell.getItem() instanceof CellarKey) inventory.pickupCellarKey();
+        if (cell.getItem() instanceof GardenKey) inventory.pickupGardenKey();
         inventory.addItem(cell.getItem());
         cell.setItem(null);
     }

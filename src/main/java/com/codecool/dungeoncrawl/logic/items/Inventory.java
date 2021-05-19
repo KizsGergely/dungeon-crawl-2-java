@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic.items;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Inventory {
     private HashMap<String, Integer> inventory = new HashMap<>();
@@ -16,6 +17,14 @@ public class Inventory {
             inventory.put(key, inventory.get(key) + 1);
         else
             inventory.put(key, 1);
+    }
+    public boolean hasMeat() {
+        for (Map.Entry<String, Integer> item: inventory.entrySet()) {
+            if (item.getKey().equals("meat")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean hasCellarKey() {

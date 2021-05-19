@@ -59,22 +59,30 @@ public class Player extends Actor {
     }
 
     public void attackIfEncounter(int dx, int dy) {
+        boolean hasMeat = inventory.hasMeat();
         Cell nextCell = cell.getNeighbor(dx, dy);
         Actor monster = nextCell.getActor();
         if (monster != null) {
-            isFighting = true;
-            opponent = monster;
-            int hit = attack - monster.defense;
-            if (hit < 0) hit = 0;
-            monster.changeHealth(hit);
-            // if monster is not dead yet, it will attack back
-            if (!monster.checkIfDead()) {
-                int hitBack = monster.attack - defense;
-                if (hitBack <= 0) hitBack = 0;
-                this.changeHealth(hitBack);
+            if (monster instanceof Cat && hasMeat) {
+                // cat won't hurt the player anymore and no fight occurs
+                ((Cat) monster).reduceAttack();
+                isFighting = false;
+                isKilledAMonster = false;
             } else {
-                isKilledAMonster = true;
-                killedMonsterName = monster.getTileName();
+                isFighting = true;
+                opponent = monster;
+                int hit = attack - monster.defense;
+                if (hit < 0) hit = 0;
+                monster.changeHealth(hit);
+                // if monster is not dead yet, it will attack back
+                if (!monster.checkIfDead()) {
+                    int hitBack = monster.attack - defense;
+                    if (hitBack <= 0) hitBack = 0;
+                    this.changeHealth(hitBack);
+                } else {
+                    isKilledAMonster = true;
+                    killedMonsterName = monster.getTileName();
+                }
             }
         } else {
             isFighting = false;

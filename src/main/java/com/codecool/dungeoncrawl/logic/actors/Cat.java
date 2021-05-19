@@ -18,5 +18,7 @@ public class Cat extends Actor {
     public String getTileName() {
         return "Cat";
     }
-
+    public void reduceAttack() {
+        attack = 0;
+    }
 }

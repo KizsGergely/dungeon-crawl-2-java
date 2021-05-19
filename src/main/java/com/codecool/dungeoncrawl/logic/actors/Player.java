@@ -42,10 +42,13 @@ public class Player extends Actor {
     public void pickupItem() {
         Item item = cell.getItem();
         if (item instanceof Apple || item instanceof Pear) health += 4;
-        if (item instanceof Carrot) health += 3;
-        if (item instanceof Cheese || item instanceof Bread) health += 2;
+        else if (item instanceof Carrot) health += 3;
+        else if (item instanceof Cheese || item instanceof Bread) health += 2;
         if (item instanceof Torch) hasTorch = true;
-        inventory.addItem(item);
+        // if player collects food, it increases health but won't be in inventory
+        if (!item.isFood()) {
+            inventory.addItem(item);
+        }
         if (item instanceof Apple || item instanceof Carrot || item instanceof Pear) {
             cell.setEnvironment(new CuttedGrass(cell));
         }

@@ -5,6 +5,7 @@ import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Item implements Drawable {
     private Cell cell;
+    protected boolean isFood = false;
 
     public Item(Cell cell) {
         this.cell = cell;
@@ -21,5 +22,9 @@ public abstract class Item implements Drawable {
 
     public int getY() {
         return cell.getY();
+    }
+
+    public boolean isFood() {
+        return isFood;
     }
 }

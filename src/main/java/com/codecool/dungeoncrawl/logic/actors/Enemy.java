@@ -9,6 +9,6 @@ public class Enemy extends Actor{
 
 	@Override
 	public String getTileName() {
-		return "enemy";
+		return "Enemy";
 	}
 }

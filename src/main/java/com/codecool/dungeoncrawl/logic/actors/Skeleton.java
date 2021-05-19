@@ -6,13 +6,17 @@ import com.codecool.dungeoncrawl.logic.Direction;
 import java.util.Random;
 
 public class Skeleton extends Actor {
+
     public Skeleton(Cell cell) {
         super(cell);
+        health = 8;
+        attack = 4;
+        defense = 1;
     }
 
     @Override
     public String getTileName() {
-        return "skeleton";
+        return "Skeleton";
     }
 
 }

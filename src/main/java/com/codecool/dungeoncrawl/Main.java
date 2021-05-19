@@ -27,12 +27,21 @@ public class Main extends Application {
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     GridPane ui = new GridPane();
-    Label healthLabel = new Label();
+    GridPane textUi = new GridPane();
+    Player player = map.getPlayer();
+    Inventory inventory = player.getInventory();
     ArrayList<Skeleton> skeletons = new ArrayList<>();
     ArrayList<Ghost> ghosts = new ArrayList<>();
     ArrayList<Enemy> enemies = new ArrayList<>();
-    Player player = map.getPlayer();
-    Inventory inventory = player.getInventory();
+    Label playerNameLabel = new Label();
+    Label playerHealthLabel = new Label();
+    Label playerAttackLabel = new Label();
+    Label playerDefenseLabel = new Label();
+    Label monsterNameLabel = new Label();
+    Label monsterHealthLabel = new Label();
+    Label monsterAttackLabel = new Label();
+    Label monsterDefenseLabel = new Label();
+    Label textLabel = new Label();
     Label inventoryLabel = new Label(inventory.toString());
     Label pickupLabel = new Label("Pick up?");
     Button yesPickupButton = new Button("Yes");
@@ -47,22 +56,33 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         ui.setPrefWidth(200);
+        textUi.setPrefWidth(50);
         ui.setPadding(new Insets(10));
+        textUi.setPadding(new Insets(10));
 
-        ui.add(new Label("Health: "), 0, 0);
-        ui.add(healthLabel, 1, 0);
-        ui.add(new Label("------------"), 0, 1);
-        ui.add(pickupLabel, 0, 3);
-        ui.add(yesPickupButton, 0,4);
-        ui.add(noPickupButton, 1, 4);
+        ui.add(pickupLabel, 0, 0);
+        ui.add(yesPickupButton, 0,1);
+        ui.add(noPickupButton, 1, 1);
         setPickupVisibility(false);
-        ui.add(new Label("Inventory: "), 0, 5);
-        ui.add(inventoryLabel, 1, 6);
+        ui.add(new Label("Inventory: "), 0, 2);
+        ui.add(inventoryLabel, 0, 3);
+
+        textUi.add(playerNameLabel, 0, 0);
+        textUi.add(playerHealthLabel, 1, 0);
+        textUi.add(playerAttackLabel, 2, 0);
+        textUi.add(playerDefenseLabel, 3, 0);
+        textUi.add(monsterNameLabel, 0, 1);
+        textUi.add(monsterHealthLabel, 1, 1);
+        textUi.add(monsterAttackLabel, 2, 1);
+        textUi.add(monsterDefenseLabel, 3, 1);
+        textUi.add(new Label(" "), 0, 2);
+        textUi.add(textLabel, 4, 3);
 
         BorderPane borderPane = new BorderPane();
 
         borderPane.setCenter(canvas);
         borderPane.setRight(ui);
+        borderPane.setTop(textUi);
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
@@ -154,12 +174,16 @@ public class Main extends Application {
         for (int y = 0; y < map.getHeight(); y++) {
             for (int x = 0; x <map.getWidth(); x++) {
                 if (map.getCell(x,y).getActor() != null) {
-                    if (map.getCell(x,y).getActor().getTileName().equals("skeleton")) {
-                        skeletons.add((Skeleton) map.getCell(x,y).getActor());
-                    } else if (map.getCell(x,y).getActor().getTileName().equals("ghost")) {
-                        ghosts.add((Ghost) map.getCell(x,y).getActor());
-                    } else if (map.getCell(x,y).getActor().getTileName().equals("enemy")) {
-                        enemies.add((Enemy) map.getCell(x,y).getActor());
+                    switch (map.getCell(x, y).getActor().getTileName()) {
+                        case "Skeleton":
+                            skeletons.add((Skeleton) map.getCell(x, y).getActor());
+                            break;
+                        case "Ghost":
+                            ghosts.add((Ghost) map.getCell(x, y).getActor());
+                            break;
+                        case "Enemy":
+                            enemies.add((Enemy) map.getCell(x, y).getActor());
+                            break;
                     }
                 }
             }
@@ -203,25 +227,51 @@ public class Main extends Application {
             }
         }
         if (player.canPickup()) pickup();
-        inventoryLabel.setText(map.getPlayer().getInventory().toString());
-        healthLabel.setText("" + map.getPlayer().getHealth());
+        inventoryLabel.setText(player.getInventory().toString());
+        getPlayerStats();
+        if (player.isFighting()) getMonsterStats();
+        else hideMonsterStats();
     }
-
-    public void pickup() {
+    private void pickup() {
         setPickupVisibility(true);
         yesPickupButton.setOnAction(event -> {
             player.pickupItem();
             refresh();
             setPickupVisibility(false);
         });
-        noPickupButton.setOnAction(event -> {
-            setPickupVisibility(false);
-        });
+        noPickupButton.setOnAction(event -> setPickupVisibility(false));
     }
 
     private void setPickupVisibility(boolean state) {
         pickupLabel.setVisible(state);
         yesPickupButton.setVisible(state);
         noPickupButton.setVisible(state);
+    }
+
+    private void getPlayerStats() {
+        playerNameLabel.setText("" + player.getName());
+        playerHealthLabel.setText(" | Health: " + player.getHealth());
+        playerAttackLabel.setText(" | Attack: " + player.getAttack());
+        playerDefenseLabel.setText(" | Defense: " + player.getDefense());
+    }
+
+    private void getMonsterStats() {
+        if (player.getOpponent() != null) {
+            monsterNameLabel.setText("" + player.getOpponent().getTileName());
+            monsterHealthLabel.setText(" | Health: " + player.getOpponent().getHealth());
+            monsterAttackLabel.setText(" | Attack: " + player.getOpponent().getAttack());
+            monsterDefenseLabel.setText(" | Defense: " + player.getOpponent().getDefense());
+            if (player.isKilledAMonster()) {
+                textLabel.setText("You killed the " + player.getKilledMonsterName() + "!");
+            }
+        }
+    }
+
+    private void hideMonsterStats() {
+        monsterNameLabel.setText("");
+        monsterHealthLabel.setText("");
+        monsterAttackLabel.setText("");
+        monsterDefenseLabel.setText("");
+        textLabel.setText("");
     }
 }

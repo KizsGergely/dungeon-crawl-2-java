@@ -30,9 +30,9 @@ public class Main extends Application {
     GridPane textUi = new GridPane();
     Player player = map.getPlayer();
     Inventory inventory = player.getInventory();
-    Cat cat;
+    ArrayList<Cat> cats = new ArrayList<>();
     ArrayList<Ghost> ghosts = new ArrayList<>();
-    Wife wife;
+    ArrayList<Wife> wives = new ArrayList<>();
     Label playerNameLabel = new Label();
     Label playerHealthLabel = new Label();
     Label playerAttackLabel = new Label();
@@ -152,8 +152,16 @@ public class Main extends Application {
         for (int y = 0; y < map.getHeight(); y++) {
             for (int x = 0; x <map.getWidth(); x++) {
                 if (map.getCell(x,y).getActor() != null) {
-                    if ("Ghost".equals(map.getCell(x, y).getActor().getTileName())) {
-                        ghosts.add((Ghost) map.getCell(x, y).getActor());
+                    switch (map.getCell(x, y).getActor().getTileName()) {
+                        case "Cat":
+                            cats.add((Cat) map.getCell(x, y).getActor());
+                            break;
+                        case "Ghost":
+                            ghosts.add((Ghost) map.getCell(x, y).getActor());
+                            break;
+                        case "Wife":
+                            wives.add((Wife) map.getCell(x, y).getActor());
+                            break;
                     }
                 }
             }
@@ -161,13 +169,16 @@ public class Main extends Application {
     }
 
     private void moveMonsters() {
-        cat.moveRandomly();
+        for (Cat skeleton: cats) {
+            skeleton.moveRandomly();
+        }
         for (Ghost ghost: ghosts) {
             ghost.moveGhostRandomly(map.getWidth(), map.getHeight());
         }
     }
 
     private void refresh() {
+//        context.setFill(Color.BLACK);
         context.setFill(Color.color(0.278431373F,0.176470588F,0.235294118F));
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 

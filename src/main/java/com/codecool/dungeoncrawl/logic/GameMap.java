@@ -8,7 +8,7 @@ public class GameMap {
     private int width;
     private int height;
     private Cell[][] cells;
-
+    private Cat cat;
     private Player player;
 
     public GameMap(int width, int height, CellType defaultCellType) {
@@ -29,6 +29,16 @@ public class GameMap {
     public void setPlayer(Player player) {
         this.player = player;
     }
+
+
+    public Cat getCat() {
+        return cat;
+    }
+
+    public void setCat(Cat cat) {
+        this.cat = cat;
+    }
+
 
     public Player getPlayer() {
         return player;

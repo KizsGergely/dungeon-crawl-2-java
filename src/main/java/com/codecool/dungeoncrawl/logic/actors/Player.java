@@ -36,6 +36,18 @@ public class Player extends Actor {
         cell.setItem(null);
     }
 
+    public void attackIfEncounter(int dx, int dy) {
+        Cell nextCell = cell.getNeighbor(dx, dy);
+        Actor monster = nextCell.getActor();
+        if (monster != null) {
+            monster.changeHealth(-5);
+            // if monster is not dead yet, it will attack back
+            if (!monster.checkIfDead()) {
+                this.changeHealth(-2);
+            }
+        }
+    }
+
     public Inventory getInventory() {
         return inventory;
     }

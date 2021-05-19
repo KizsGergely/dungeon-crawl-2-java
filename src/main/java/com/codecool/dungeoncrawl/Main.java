@@ -3,9 +3,7 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
-import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.logic.actors.Ghost;
-import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.items.Inventory;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -20,7 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
@@ -32,6 +30,7 @@ public class Main extends Application {
     Label healthLabel = new Label();
     ArrayList<Skeleton> skeletons = new ArrayList<>();
     ArrayList<Ghost> ghosts = new ArrayList<>();
+    ArrayList<Enemy> enemies = new ArrayList<>();
     Player player = map.getPlayer();
     Inventory inventory = player.getInventory();
     Label inventoryLabel = new Label(inventory.toString());
@@ -75,26 +74,78 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        int dx = 0;
+        int dy = 0;
+        moveMonsters();
         switch (keyEvent.getCode()) {
             case UP:
-                player.move(0, -1);
-                refresh();
+                dx = 0;
+                dy = -1;
                 break;
             case DOWN:
-                player.move(0, 1);
-                refresh();
+                dx = 0;
+                dy = 1;
                 break;
             case LEFT:
-                player.move(-1, 0);
-                refresh();
+                dx = -1;
+                dy = 0;
                 break;
             case RIGHT:
-                player.move(1,0);
-                refresh();
+                dx = 1;
+                dy = 0;
                 break;
         }
-        moveMonsters();
+        player.attackIfEncounter(dx, dy);
+        removeMonstersIfDead(skeletons, ghosts, enemies);
+        restartGameIfDead();
+        player.move(dx, dy);
         refresh();
+
+    }
+
+    private void restartGameIfDead() {
+        // now it just exits
+        if (player.checkIfDead()) {
+            System.exit(0);
+        }
+    }
+
+    private void removeMonstersIfDead(ArrayList<Skeleton> skeletons, ArrayList<Ghost> ghosts, ArrayList<Enemy> enemies) {
+        int skeletonIndex = -1;
+        int ghostIndex = -1;
+        int enemyIndex = -1;
+        // remove monster from map
+        for (int i = 0; i < skeletons.size(); i++) {
+            if (skeletons.get(i).checkIfDead()) {
+                skeletons.get(i).getCell().setActor(null);
+                skeletonIndex = i;
+                break;
+            }
+        }
+        for (int i = 0; i < ghosts.size(); i++) {
+            if (ghosts.get(i).checkIfDead()) {
+                ghosts.get(i).getCell().setActor(null);
+                ghostIndex = i;
+                break;
+            }
+        }
+        for (int i = 0; i < enemies.size(); i++) {
+            if (enemies.get(i).checkIfDead()) {
+                enemies.get(i).getCell().setActor(null);
+                enemyIndex = i;
+                break;
+            }
+        }
+        // remove monster from the list where it is collected with the other similar monsters
+        if (skeletonIndex > -1) {
+            skeletons.remove(skeletonIndex);
+        }
+        if (ghostIndex > -1) {
+            ghosts.remove(ghostIndex);
+        }
+        if (enemyIndex > -1) {
+            enemies.remove(enemyIndex);
+        }
     }
 
     private void groupMonsters() {
@@ -105,6 +156,8 @@ public class Main extends Application {
                         skeletons.add((Skeleton) map.getCell(x,y).getActor());
                     } else if (map.getCell(x,y).getActor().getTileName().equals("ghost")) {
                         ghosts.add((Ghost) map.getCell(x,y).getActor());
+                    } else if (map.getCell(x,y).getActor().getTileName().equals("enemy")) {
+                        enemies.add((Enemy) map.getCell(x,y).getActor());
                     }
                 }
             }

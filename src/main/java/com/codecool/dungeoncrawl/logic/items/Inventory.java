@@ -4,7 +4,8 @@ import java.util.HashMap;
 
 public class Inventory {
     private HashMap<String, Integer> inventory = new HashMap<>();
-    private Key key;
+    private GardenKey gardenKey;
+    private CellarKey cellarKey;
 
     public Inventory() {
     }
@@ -17,9 +18,11 @@ public class Inventory {
             inventory.put(key, 1);
     }
 
-    public boolean hasKey() {
-        return key != null;
+    public boolean hasCellarKey() {
+        return cellarKey != null;
     }
+
+    public boolean hasGardenKey() { return gardenKey != null; }
 
     @Override
     public String toString() {

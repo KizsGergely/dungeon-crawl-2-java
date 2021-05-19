@@ -60,6 +60,7 @@ public class Cell implements Drawable {
         return type.getTileName();
     }
 
+
     public int getX() {
         return x;
     }

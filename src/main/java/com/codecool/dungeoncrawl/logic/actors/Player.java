@@ -2,6 +2,7 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
+import com.codecool.dungeoncrawl.logic.environment.CuttedGrass;
 import com.codecool.dungeoncrawl.logic.items.*;
 
 public class Player extends Actor {
@@ -39,11 +40,15 @@ public class Player extends Actor {
     }
 
     public void pickupItem() {
-        if (cell.getItem() instanceof Apple || cell.getItem() instanceof Pear) health += 4;
-        if (cell.getItem() instanceof Carrot) health += 3;
-        if (cell.getItem() instanceof Cheese || cell.getItem() instanceof Bread) health += 2;
-        if (cell.getItem() instanceof Torch) hasTorch = true;
-        inventory.addItem(cell.getItem());
+        Item item = cell.getItem();
+        if (item instanceof Apple || item instanceof Pear) health += 4;
+        if (item instanceof Carrot) health += 3;
+        if (item instanceof Cheese || item instanceof Bread) health += 2;
+        if (item instanceof Torch) hasTorch = true;
+        inventory.addItem(item);
+        if (item instanceof Apple || item instanceof Carrot || item instanceof Pear) {
+            cell.setEnvironment(new CuttedGrass(cell));
+        }
         cell.setItem(null);
     }
 

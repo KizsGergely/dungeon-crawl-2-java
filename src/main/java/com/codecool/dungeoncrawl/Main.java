@@ -30,9 +30,9 @@ public class Main extends Application {
     GridPane textUi = new GridPane();
     Player player = map.getPlayer();
     Inventory inventory = player.getInventory();
-    ArrayList<Skeleton> skeletons = new ArrayList<>();
+    Cat cat;
     ArrayList<Ghost> ghosts = new ArrayList<>();
-    ArrayList<Enemy> enemies = new ArrayList<>();
+    Wife wife;
     Label playerNameLabel = new Label();
     Label playerHealthLabel = new Label();
     Label playerAttackLabel = new Label();
@@ -118,7 +118,7 @@ public class Main extends Application {
                 break;
         }
         player.attackIfEncounter(dx, dy);
-        removeMonstersIfDead(skeletons, ghosts, enemies);
+        removeMonstersIfDead(ghosts);
         restartGameIfDead();
         player.move(dx, dy);
         refresh();
@@ -132,18 +132,9 @@ public class Main extends Application {
         }
     }
 
-    private void removeMonstersIfDead(ArrayList<Skeleton> skeletons, ArrayList<Ghost> ghosts, ArrayList<Enemy> enemies) {
-        int skeletonIndex = -1;
+    private void removeMonstersIfDead(ArrayList<Ghost> ghosts) {
         int ghostIndex = -1;
-        int enemyIndex = -1;
         // remove monster from map
-        for (int i = 0; i < skeletons.size(); i++) {
-            if (skeletons.get(i).checkIfDead()) {
-                skeletons.get(i).getCell().setActor(null);
-                skeletonIndex = i;
-                break;
-            }
-        }
         for (int i = 0; i < ghosts.size(); i++) {
             if (ghosts.get(i).checkIfDead()) {
                 ghosts.get(i).getCell().setActor(null);
@@ -151,22 +142,9 @@ public class Main extends Application {
                 break;
             }
         }
-        for (int i = 0; i < enemies.size(); i++) {
-            if (enemies.get(i).checkIfDead()) {
-                enemies.get(i).getCell().setActor(null);
-                enemyIndex = i;
-                break;
-            }
-        }
         // remove monster from the list where it is collected with the other similar monsters
-        if (skeletonIndex > -1) {
-            skeletons.remove(skeletonIndex);
-        }
         if (ghostIndex > -1) {
             ghosts.remove(ghostIndex);
-        }
-        if (enemyIndex > -1) {
-            enemies.remove(enemyIndex);
         }
     }
 
@@ -174,16 +152,8 @@ public class Main extends Application {
         for (int y = 0; y < map.getHeight(); y++) {
             for (int x = 0; x <map.getWidth(); x++) {
                 if (map.getCell(x,y).getActor() != null) {
-                    switch (map.getCell(x, y).getActor().getTileName()) {
-                        case "Skeleton":
-                            skeletons.add((Skeleton) map.getCell(x, y).getActor());
-                            break;
-                        case "Ghost":
-                            ghosts.add((Ghost) map.getCell(x, y).getActor());
-                            break;
-                        case "Enemy":
-                            enemies.add((Enemy) map.getCell(x, y).getActor());
-                            break;
+                    if ("Ghost".equals(map.getCell(x, y).getActor().getTileName())) {
+                        ghosts.add((Ghost) map.getCell(x, y).getActor());
                     }
                 }
             }
@@ -191,16 +161,13 @@ public class Main extends Application {
     }
 
     private void moveMonsters() {
-        for (Skeleton skeleton: skeletons) {
-            skeleton.moveRandomly();
-        }
+        cat.moveRandomly();
         for (Ghost ghost: ghosts) {
             ghost.moveGhostRandomly(map.getWidth(), map.getHeight());
         }
     }
 
     private void refresh() {
-//        context.setFill(Color.BLACK);
         context.setFill(Color.color(0.278431373F,0.176470588F,0.235294118F));
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 

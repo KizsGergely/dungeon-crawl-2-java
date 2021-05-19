@@ -5,7 +5,6 @@ import com.codecool.dungeoncrawl.logic.items.*;
 import com.codecool.dungeoncrawl.logic.environment.*;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MapLoader {
@@ -35,7 +34,7 @@ public class MapLoader {
                             break;
                         case 'C':
                             cell.setType(CellType.FLOOR);
-                            new Skeleton(cell);
+                            new Cat(cell);
                             break;
                         case '@':
                             cell.setType(CellType.FLOOR);
@@ -49,17 +48,13 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             new Cheese(cell);
                             break;
-                        case 's':
-                            cell.setType(CellType.FLOOR);
-                            new Sword(cell);
-                            break;
                         case 'G':
                             cell.setType(CellType.FLOOR);
                             new Ghost(cell);
                             break;
-                        case 'E':
+                        case 'W':
                             cell.setType(CellType.FLOOR);
-                            new Enemy(cell);
+                            new Wife(cell);
                             break;
                         case 'g':
                             cell.setType(CellType.FLOOR);

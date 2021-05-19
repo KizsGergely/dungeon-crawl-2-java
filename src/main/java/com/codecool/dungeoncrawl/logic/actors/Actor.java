@@ -13,7 +13,7 @@ public abstract class Actor implements Drawable {
     protected Cell cell;
     protected String name;
     protected int health = 10;
-    protected int attack = 3;
+    protected int attack = 5;
     protected int defense = 2;
 
     public Actor(Cell cell) {
@@ -68,7 +68,7 @@ public abstract class Actor implements Drawable {
     }
 
     public void changeHealth(int dh) {
-        this.health = Math.max(health + dh, 0);
+        this.health = health - dh;
     }
 
     public boolean checkIfDead() {

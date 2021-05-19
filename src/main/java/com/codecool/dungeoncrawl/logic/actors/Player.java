@@ -52,14 +52,14 @@ public class Player extends Actor {
         if (monster != null) {
             isFighting = true;
             opponent = monster;
-            int hit = monster.defense - attack;
-            if (hit < 0) hit = Math.abs(hit);
-            monster.changeHealth(-hit);
+            int hit = attack - monster.defense;
+            if (hit < 0) hit = 0;
+            monster.changeHealth(hit);
             // if monster is not dead yet, it will attack back
             if (!monster.checkIfDead()) {
                 int hitBack = monster.attack - defense;
                 if (hitBack <= 0) hitBack = 0;
-                this.changeHealth(-hitBack);
+                this.changeHealth(hitBack);
             } else {
                 isKilledAMonster = true;
                 killedMonsterName = monster.getTileName();

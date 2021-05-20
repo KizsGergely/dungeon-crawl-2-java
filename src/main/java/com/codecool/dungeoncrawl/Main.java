@@ -24,9 +24,9 @@ import java.util.*;
 
 public class Main extends Application {
     int level = 1;
-    Player playa =
     GameMap map1 = MapLoader.loadMap(1);
     GameMap map2 = MapLoader.loadMap(2);
+    Player player = new Player(map1.getCell(6, 15));
     GameMap map = map1;
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
@@ -34,7 +34,6 @@ public class Main extends Application {
     GraphicsContext context = canvas.getGraphicsContext2D();
     GridPane ui = new GridPane();
     GridPane textUi = new GridPane();
-    Player player = map.getPlayer();
     Inventory inventory = player.getInventory();
     ArrayList<Cat> cats = new ArrayList<>();
     ArrayList<Ghost> ghosts = new ArrayList<>();
@@ -95,7 +94,7 @@ public class Main extends Application {
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
 
-        primaryStage.setTitle("Dungeon Crawl");
+        primaryStage.setTitle("lwarC noegnuD");
         primaryStage.show();
         groupMonsters();
 
@@ -127,8 +126,8 @@ public class Main extends Application {
         removeMonstersIfDead(ghosts);
         restartGameIfDead();
         player.move(dx, dy);
+        if (level != player.getLevelNumber()) changeMap();
         refresh();
-
     }
 
     private void restartGameIfDead() {
@@ -188,10 +187,10 @@ public class Main extends Application {
         context.setFill(Color.color(0.278431373F,0.176470588F,0.235294118F));
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        int minX = Math.max(map.getPlayer().getX() - viewHorizontal, 0);
-        int maxX = Math.min(map.getWidth(),map.getPlayer().getX() + viewHorizontal);
-        int minY = Math.max(map.getPlayer().getY() - viewVertical, 0);
-        int maxY = Math.min(map.getHeight(),map.getPlayer().getY() + viewVertical);
+        int minX = Math.max(player.getX() - viewHorizontal, 0);
+        int maxX = Math.min(map.getWidth(),player.getX() + viewHorizontal);
+        int minY = Math.max(player.getY() - viewVertical, 0);
+        int maxY = Math.min(map.getHeight(),player.getY() + viewVertical);
 
         if(minX == 0) maxX = Math.min(2 * viewHorizontal + 1, map.getWidth() -1);
         if(minY == 0) maxY = Math.min(2 * viewVertical + 1, map.getHeight() -1);
@@ -202,13 +201,6 @@ public class Main extends Application {
             for (int y = 0; y < map.getHeight(); y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
-                    if (cell.getEnvironment() != null) {
-                        if (level != player.getLevelNumber()) {
-//                        if (cell.getEnvironment().getTileName().equals("stairDown") ||
-//                            cell.getEnvironment().getTileName().equals("stairUp")) {
-                            changeMap();
-                        }
-                    }
                     Tiles.drawTile(context, cell.getActor(), x - minX, y-minY);
                 } else if (cell.getItem() != null) {
                     Tiles.drawTile(context, cell.getItem(), x - minX, y - minY);
@@ -297,28 +289,23 @@ public class Main extends Application {
     }
 
     private void changeMap() {
-        Inventory originalInventory = inventory;
         GameMap currentMap = map;
-//        player.setX(3);
+        map.setPlayer(null);
+        map.setCell(null, player.getX(), player.getY());
         level = player.getLevelNumber();
         switch (level) {
             case 1:
-                player.setX(5);
                 map2 = currentMap;
                 map = map1;
                 break;
             case 2:
-//                player.setX(5);
                 map1 = currentMap;
                 map = map2;
                 break;
         }
-//        this.map = MapLoader.loadMap(level);
-//        System.out.println(player);
-//                            map.setPlayer(originalPlayer);
-        player = map.getPlayer();
-        player.setInventory(originalInventory);
-//        System.out.println(player);
+        map.setCell(player,2, 13);
+        player.setCell(map.getCell(2,13));
+        map.setPlayer(player);
         groupMonsters();
         moveMonsters();
         refresh();

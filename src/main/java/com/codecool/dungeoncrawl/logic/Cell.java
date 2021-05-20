@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Actor;
+import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.environment.Environment;
 
@@ -70,9 +71,5 @@ public class Cell implements Drawable {
 
     public void setX(int x) {
         this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 }

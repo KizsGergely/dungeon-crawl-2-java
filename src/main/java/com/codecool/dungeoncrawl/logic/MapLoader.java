@@ -1,11 +1,13 @@
 package com.codecool.dungeoncrawl.logic;
 
-import com.codecool.dungeoncrawl.logic.actors.*;
-import com.codecool.dungeoncrawl.logic.items.*;
+import com.codecool.dungeoncrawl.logic.actors.Cat;
+import com.codecool.dungeoncrawl.logic.actors.Ghost;
+import com.codecool.dungeoncrawl.logic.actors.Scrub;
+import com.codecool.dungeoncrawl.logic.actors.Wife;
 import com.codecool.dungeoncrawl.logic.environment.*;
+import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MapLoader {
@@ -40,10 +42,10 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             new Cat(cell);
                             break;
-                        case '@':
-                            cell.setType(CellType.FLOOR);
-                            map.setPlayer(new Player(cell));
-                            break;
+//                        case '@':
+//                            cell.setType(CellType.FLOOR);
+////                            map.setPlayer(new Player(cell));
+//                            break;
                         case 'c':
                             cell.setType(CellType.FLOOR);
                             new Cheese(cell);

@@ -3,13 +3,17 @@ package com.codecool.dungeoncrawl.logic;
 import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.items.*;
 import com.codecool.dungeoncrawl.logic.environment.*;
+import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.io.InputStream;
 import java.util.Scanner;
 
 public class MapLoader {
-    public static GameMap loadMap() {
-        InputStream is = MapLoader.class.getResourceAsStream("/map.txt");
+    public static GameMap loadMap(int level) {
+        String fileName;
+        if (level == 1) fileName = "/map.txt";
+        else fileName = "/map2.txt";
+        InputStream is = MapLoader.class.getResourceAsStream(fileName);
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
@@ -36,10 +40,10 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             new Cat(cell);
                             break;
-                        case '@':
-                            cell.setType(CellType.FLOOR);
-                            map.setPlayer(new Player(cell));
-                            break;
+//                        case '@':
+//                            cell.setType(CellType.FLOOR);
+////                            map.setPlayer(new Player(cell));
+//                            break;
                         case 'c':
                             cell.setType(CellType.FLOOR);
                             new Cheese(cell);
@@ -97,12 +101,12 @@ public class MapLoader {
                             new LightBulb(cell);
                             break;
                         case 'o':
-                            cell.setType(CellType.WALL);
-                            new ClosedDoor(cell);
+                            cell.setType(CellType.DOOR);
+                            new CellarDoor(cell);
                             break;
                         case 'O':
-                            cell.setType(CellType.FLOOR);
-                            new OpenDoor(cell);
+                            cell.setType(CellType.DOOR);
+                            new GardenDoor(cell);
                             break;
                         case 'f':
                             cell.setType(CellType.WALL);
@@ -141,11 +145,11 @@ public class MapLoader {
                             new Window(cell);
                             break;
                         case '<':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.STAIR);
                             new StairUp(cell);
                             break;
                         case '>':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.STAIR);
                             new StairDown(cell);
                             break;
                         case '3':

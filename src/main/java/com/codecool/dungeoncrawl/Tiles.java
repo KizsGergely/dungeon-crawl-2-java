@@ -42,28 +42,10 @@ public class Tiles {
         tileMap.put("torch", new Tile(4, 15)); // t
         tileMap.put("lamp", new Tile(1, 7)); // l
         tileMap.put("light bulb", new Tile(29, 11)); // b
-        tileMap.put("closed door", new Tile(3, 4)); // o
-        tileMap.put("open door", new Tile(4, 4)); // O
-        tileMap.put("fence", new Tile(1, 3)); // f
-        tileMap.put("gate", new Tile(3, 3)); // F
-        tileMap.put("toilet", new Tile(12, 10)); //đ
-        tileMap.put("tub", new Tile(13, 10)); // ×
-        tileMap.put("bed", new Tile(5, 8)); // Đ
-        tileMap.put("tv", new Tile(2, 8)); // T
-        tileMap.put("sofa1", new Tile(6, 8)); // 1
-        tileMap.put("sofa2", new Tile(7, 8)); // 2
-        tileMap.put("window", new Tile(12, 17)); // ß
-        tileMap.put("grass", new Tile(0, 2));  // +
-        tileMap.put("cutted grass", new Tile(5, 0));  //-
-        tileMap.put("apple", new Tile(15, 29));  // a
-        tileMap.put("meat", new Tile(16, 28));  // h
-        tileMap.put("spiderweb", new Tile(2, 15));  // w
-        tileMap.put("bones", new Tile(0, 15)); // x
-        tileMap.put("torch", new Tile(4, 15)); // t
-        tileMap.put("lamp", new Tile(1, 7)); // l
-        tileMap.put("light bulb", new Tile(29, 11)); // b
-        tileMap.put("closed door", new Tile(3, 4)); // o
-        tileMap.put("open door", new Tile(4, 4)); // O
+        tileMap.put("closed garden door", new Tile(3, 4)); // O
+        tileMap.put("open garden door", new Tile(4, 4)); // O
+        tileMap.put("closed cellar door", new Tile(3, 3)); // o
+        tileMap.put("open cellar door", new Tile(4, 3)); // o
         tileMap.put("fence", new Tile(1, 3)); // f
         tileMap.put("gate", new Tile(3, 3)); // F
         tileMap.put("toilet", new Tile(12, 10)); //đ

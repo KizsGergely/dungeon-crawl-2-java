@@ -128,6 +128,7 @@ public class Main extends Application {
         restartGameIfDead();
         player.move(dx, dy);
         if (level != player.getLevelNumber()) changeMap();
+        if (player.isWifeHappy()) win();
         refresh();
     }
 
@@ -329,6 +330,12 @@ public class Main extends Application {
         groupMonsters();
         moveMonsters();
         refresh();
+    }
+
+    private void win() {
+        textLabel.setText("Your wife is happy, you won! That's what matters the most! Wink wink.");
+        setPickupVisibility(true);
+        pickupLabel.setText("VUUUUU!");
     }
 
 }

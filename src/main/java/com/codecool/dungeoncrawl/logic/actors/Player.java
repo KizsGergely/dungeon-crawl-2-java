@@ -19,6 +19,9 @@ public class Player extends Actor {
     private Actor opponent;
     private int onLevel = 1;
     private int grassToCut;
+    private boolean hasRing = false;
+    private boolean isWifeHappy = false;
+    private boolean isCatFed = false;
 
     public Player(Cell cell) {
         super(cell);
@@ -62,12 +65,14 @@ public class Player extends Actor {
         else if (item instanceof Cheese || item instanceof Bread) health += 2;
         if (item instanceof CellarKey) inventory.pickupCellarKey();
         if (item instanceof GardenKey) inventory.pickupGardenKey();
+        if (item instanceof Ring) hasRing = true;
         if (inventory.hasCellarKey()) hasCellarKey = true;
         if (inventory.hasGardenKey()) hasGardenKey = true;
         if (item instanceof Torch) hasTorch = true;
         // if player collects food, it increases health but won't be in inventory
         if (!item.isFood()) {
             inventory.addItem(item);
+
         }
         if (item instanceof Apple || item instanceof Carrot || item instanceof Pear) {
             cell.setEnvironment(new CuttedGrass(cell));
@@ -83,8 +88,12 @@ public class Player extends Actor {
             if (monster instanceof Cat && hasMeat) {
                 // cat won't hurt the player anymore and no fight occurs
                 ((Cat) monster).reduceAttack();
+                isCatFed = true;
                 isFighting = false;
                 isKilledAMonster = false;
+            } else if (monster instanceof Wife && isGrassCut && isCatFed && hasRing) {
+                // wife is happy
+                isWifeHappy = true;
             } else {
                 isFighting = true;
                 opponent = monster;
@@ -135,6 +144,10 @@ public class Player extends Actor {
         return onLevel;
     }
 
+    public boolean isWifeHappy(){
+        return isWifeHappy;
+    }
+
     public boolean hasCellarKey() {
         return hasCellarKey;
     }
@@ -150,7 +163,7 @@ public class Player extends Actor {
         Environment floor = cell.getEnvironment();
         if (floor instanceof Grass) {
             cell.setEnvironment(new CuttedGrass(cell));
-            System.out.println("die fű die");
+            System.out.println("die fű DIE!");
             System.out.println(grassToCut);
             grassToCut -= 1;
             if (grassToCut == 0){

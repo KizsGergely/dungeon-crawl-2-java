@@ -14,9 +14,11 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -61,6 +63,24 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Label welcome = new Label("Welcome!\n\nPlease enter your name:");
+        TextField nameInput = new TextField("What is your name? ");
+        Button confirm = new Button("OK");
+        VBox layout = new VBox(2);
+        layout.setPadding(new Insets(10, 10, 10, 10));
+        layout.getChildren().addAll(welcome, nameInput, confirm);
+        Scene nameScene = new Scene(layout, 300, 150);
+        Stage nameStage = new Stage();
+        nameStage.setTitle("Name yourself!");
+        nameStage.setScene(nameScene);
+        nameStage.show();
+        confirm.setOnAction(event -> {
+            player.setName(nameInput.getText());
+            nameStage.close();
+            primaryStage.setTitle("lwarC noegnuD");
+            primaryStage.show();
+            refresh();
+        });
         ui.setPrefWidth(200);
         textUi.setPrefWidth(50);
         ui.setPadding(new Insets(10));
@@ -95,8 +115,6 @@ public class Main extends Application {
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
 
-        primaryStage.setTitle("lwarC noegnuD");
-        primaryStage.show();
         groupMonsters();
         player.setGrassToCut(map.getGrassCounter());
     }
@@ -133,9 +151,21 @@ public class Main extends Application {
     }
 
     private void restartGameIfDead() {
-        // now it just exits
         if (player.checkIfDead()) {
-            System.exit(0);
+            Label endText = new Label("Oops! You're dead!");
+            Button endButton = new Button("I know! :(");
+            VBox endBox = new VBox(2);
+            endBox.setPadding(new Insets(10, 10, 10, 10));
+            endBox.getChildren().addAll(endText, endButton);
+            Scene endScene = new Scene(endBox, 200, 100);
+            Stage endStage = new Stage();
+            endStage.setTitle("Haha!");
+            endStage.setScene(endScene);
+            endStage.show();
+            endButton.setOnAction(event -> {
+                endStage.close();
+                System.exit(0);
+            });
         }
     }
 
@@ -236,6 +266,7 @@ public class Main extends Application {
         getPlayerStats();
         if (player.isFighting()) getMonsterStats();
         else hideMonsterStats();
+        playerNameCheck();
     }
 
     private void pickup() {
@@ -330,6 +361,15 @@ public class Main extends Application {
         groupMonsters();
         moveMonsters();
         refresh();
+    }
+
+    private void playerNameCheck() {
+        ArrayList<String> developers = new ArrayList<>();
+        developers.add("allisC");
+        developers.add("ireG");
+        developers.add("iloZ");
+        boolean isDev = developers.contains(player.getName());
+        if (isDev) player.makeWifeHappy();
     }
 
     private void win() {

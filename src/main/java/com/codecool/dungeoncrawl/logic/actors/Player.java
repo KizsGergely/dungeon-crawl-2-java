@@ -148,6 +148,10 @@ public class Player extends Actor {
         return isWifeHappy;
     }
 
+    public void makeWifeHappy() {
+        isWifeHappy = true;
+    }
+
     public boolean hasCellarKey() {
         return hasCellarKey;
     }
@@ -170,5 +174,9 @@ public class Player extends Actor {
                 isGrassCut = true;
             }
         }
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

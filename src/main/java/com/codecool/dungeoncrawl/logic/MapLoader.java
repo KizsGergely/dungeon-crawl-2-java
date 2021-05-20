@@ -5,7 +5,6 @@ import com.codecool.dungeoncrawl.logic.items.*;
 import com.codecool.dungeoncrawl.logic.environment.*;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MapLoader {
@@ -45,10 +44,6 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             new Cheese(cell);
                             break;
-                        case 's':
-                            cell.setType(CellType.FLOOR);
-                            new Sword(cell);
-                            break;
                         case 'G':
                             cell.setType(CellType.FLOOR);
                             new Ghost(cell);
@@ -82,11 +77,11 @@ public class MapLoader {
                             new Meat(cell);
                             break;
                         case 'w':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new SpiderWeb(cell);
                             break;
                         case 'x':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new Bones(cell);
                             break;
                         case 't':
@@ -94,7 +89,7 @@ public class MapLoader {
                             new Torch(cell);
                             break;
                         case 'l':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new Lamp(cell);
                             break;
                         case 'b':
@@ -102,7 +97,7 @@ public class MapLoader {
                             new LightBulb(cell);
                             break;
                         case 'o':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new ClosedDoor(cell);
                             break;
                         case 'O':
@@ -110,7 +105,7 @@ public class MapLoader {
                             new OpenDoor(cell);
                             break;
                         case 'f':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new Fence(cell);
                             break;
                         case 'F':
@@ -118,31 +113,31 @@ public class MapLoader {
                             new Gate(cell);
                             break;
                         case 'đ':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new Toilet(cell);
                             break;
                         case '×':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new Tub(cell);
                             break;
                         case 'Đ':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new Bed(cell);
                             break;
                         case 'T':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new Tv(cell);
                             break;
                         case '1':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new Sofa1(cell);
                             break;
                         case '2':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new Sofa2(cell);
                             break;
                         case 'ß':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new Window(cell);
                             break;
                         case '<':
@@ -154,19 +149,19 @@ public class MapLoader {
                             new StairDown(cell);
                             break;
                         case '3':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new Cross1(cell);
                             break;
                         case '4':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new Cross2(cell);
                             break;
                         case 'B':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new Book(cell);
                             break;
                         case 'm':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.WALL);
                             new Mirror(cell);
                             break;
                         case '$':

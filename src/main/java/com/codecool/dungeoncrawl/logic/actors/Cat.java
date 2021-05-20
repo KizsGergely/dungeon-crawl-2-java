@@ -9,14 +9,16 @@ public class Cat extends Actor {
 
     public Cat(Cell cell) {
         super(cell);
-        health = 8;
-        attack = 4;
-        defense = 1;
+        health = 9;
+        attack = 3;
+        defense = 100;
     }
 
     @Override
     public String getTileName() {
         return "Cat";
     }
-
+    public void reduceAttack() {
+        attack = 0;
+    }
 }

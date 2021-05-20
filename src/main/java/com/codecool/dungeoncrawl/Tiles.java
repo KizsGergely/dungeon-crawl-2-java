@@ -66,6 +66,10 @@ public class Tiles {
         tileMap.put("carrot", new Tile(18, 30)); // r
         tileMap.put("ring", new Tile(14, 28)); // &
         tileMap.put("Scrub", new Tile(24, 1)); // S
+        tileMap.put("ufo", new Tile(14, 20)); // 7
+        tileMap.put("beam", new Tile(14, 18)); // 8
+        tileMap.put("cow", new Tile(27, 7)); // 9
+        tileMap.put("knife", new Tile(0, 28)); // €
 
     }
 

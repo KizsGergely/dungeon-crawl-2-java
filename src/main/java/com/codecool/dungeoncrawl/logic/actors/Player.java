@@ -66,6 +66,7 @@ public class Player extends Actor {
         if (item instanceof CellarKey) inventory.pickupCellarKey();
         if (item instanceof GardenKey) inventory.pickupGardenKey();
         if (item instanceof Ring) hasRing = true;
+        if (item instanceof Knife) attack += 3;
         if (inventory.hasCellarKey()) hasCellarKey = true;
         if (inventory.hasGardenKey()) hasGardenKey = true;
         if (item instanceof Torch) hasTorch = true;

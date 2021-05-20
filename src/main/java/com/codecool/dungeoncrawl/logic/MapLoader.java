@@ -188,6 +188,22 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             new Scrub(cell);
                             break;
+                        case '7':
+                            cell.setType(CellType.WALL);
+                            new Ufo(cell);
+                            break;
+                        case '8':
+                            cell.setType(CellType.WALL);
+                            new Beam(cell);
+                            break;
+                        case '9':
+                            cell.setType(CellType.WALL);
+                            new Cow(cell);
+                            break;
+                        case '€':
+                            cell.setType(CellType.FLOOR);
+                            new Knife(cell);
+                            break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }

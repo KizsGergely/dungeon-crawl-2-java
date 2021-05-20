@@ -31,7 +31,7 @@ public class Tiles {
         tileMap.put("garden key", new Tile(16, 23));  // k
         tileMap.put("cellar key", new Tile(17, 23));  // K
         tileMap.put("cheese", new Tile(18, 28));  // c
-        tileMap.put("Ghost", new Tile(26, 6));  // G
+        tileMap.put("Ghost of your mother-in-law", new Tile(26, 6));  // G
         tileMap.put("Wife", new Tile(24, 4));  // W
         tileMap.put("grass", new Tile(0, 2));  // +
         tileMap.put("cutted grass", new Tile(5, 0));  //-

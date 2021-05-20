@@ -43,11 +43,9 @@ public class GameMap {
         this.cat = cat;
     }
 
-
     public Player getPlayer() {
         return player;
     }
-
 
     public int getWidth() {
         return width;

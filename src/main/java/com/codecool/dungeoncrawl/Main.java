@@ -26,7 +26,7 @@ public class Main extends Application {
     int level = 1;
     GameMap map1 = MapLoader.loadMap(1);
     GameMap map2 = MapLoader.loadMap(2);
-    Player player = new Player(map1.getCell(6, 15));
+    Player player = new Player(map1.getCell(20, 4));
     GameMap map = map1;
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
@@ -99,7 +99,6 @@ public class Main extends Application {
         primaryStage.show();
         groupMonsters();
         player.setGrassToCut(map.getGrassCounter());
-
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -174,7 +173,7 @@ public class Main extends Application {
                         case "Cat":
                             cats.add((Cat) map.getCell(x, y).getActor());
                             break;
-                        case "Ghost":
+                        case "Ghost of your mother-in-law":
                             ghosts.add((Ghost) map.getCell(x, y).getActor());
                             break;
                         case "Wife":
@@ -236,9 +235,6 @@ public class Main extends Application {
         getPlayerStats();
         if (player.isFighting()) getMonsterStats();
         else hideMonsterStats();
-//        level = player.getLevelNumber();
-//        System.out.println(player.getX());
-
     }
 
     private void pickup() {
@@ -329,7 +325,6 @@ public class Main extends Application {
             map.setCell(player,2, 10);
             player.setCell(map.getCell(2,10));
         }
-
         map.setPlayer(player);
         groupMonsters();
         moveMonsters();

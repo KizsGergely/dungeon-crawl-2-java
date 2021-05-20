@@ -10,6 +10,7 @@ public class GameMap {
     private Cell[][] cells;
     private Cat cat;
     private Player player;
+    private int grassCounter;
 
     public GameMap(int width, int height, CellType defaultCellType) {
         this.width = width;
@@ -50,5 +51,14 @@ public class GameMap {
 
     public int getHeight() {
         return height;
+    }
+
+    public int getGrassCounter(){return grassCounter;}
+
+    public void setGrassCounter(){
+        grassCounter += 1;
+    }
+    public void lowerGrassCounter(){
+        grassCounter -= 1;
     }
 }

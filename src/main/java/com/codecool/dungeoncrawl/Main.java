@@ -197,6 +197,7 @@ public class Main extends Application {
 
     private void refresh() {
 //        context.setFill(Color.BLACK);
+        System.out.println(map.getGrassCounter());
         context.setFill(Color.color(0.278431373F,0.176470588F,0.235294118F));
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 

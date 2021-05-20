@@ -2,10 +2,12 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
+import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.environment.CuttedGrass;
 import com.codecool.dungeoncrawl.logic.environment.Environment;
 import com.codecool.dungeoncrawl.logic.environment.Grass;
 import com.codecool.dungeoncrawl.logic.items.*;
+
 
 public class Player extends Actor {
     private Inventory inventory = new Inventory();
@@ -13,12 +15,16 @@ public class Player extends Actor {
     private boolean canPickupItem = false;
     private boolean isFighting = false;
     private boolean isKilledAMonster = false;
+    private boolean isGrassCut = false;
     private String killedMonsterName;
     private Actor opponent;
+    private GameMap map;
 
-    public Player(Cell cell) {
+
+    public Player(Cell cell, GameMap gameMap) {
         super(cell);
         name = "Player";
+        this.map = gameMap;
     }
 
     public String getTileName() {
@@ -113,6 +119,10 @@ public class Player extends Actor {
         Environment floor = cell.getEnvironment();
         if (floor instanceof Grass) {
             cell.setEnvironment(new CuttedGrass(cell));
+            map.lowerGrassCounter();
+            if (map.getGrassCounter() == 0){
+                isGrassCut = true;
+            }
         }
     }
 }

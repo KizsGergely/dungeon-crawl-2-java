@@ -38,7 +38,7 @@ public class MapLoader {
                             break;
                         case '@':
                             cell.setType(CellType.FLOOR);
-                            map.setPlayer(new Player(cell));
+                            map.setPlayer(new Player(cell, map));
                             break;
                         case 'c':
                             cell.setType(CellType.FLOOR);
@@ -63,6 +63,7 @@ public class MapLoader {
                         case '+':
                             cell.setType(CellType.FLOOR);
                             new Grass(cell);
+                            map.setGrassCounter();
                             break;
                         case '-':
                             cell.setType(CellType.FLOOR);

@@ -215,8 +215,7 @@ public class Main extends Application {
         getPlayerStats();
         if (player.isFighting()) getMonsterStats();
         else hideMonsterStats();
-        level = player.getLevelNumber();
-        if (player.canGoToCellar()) changeMapToCellar();
+//        level = player.getLevelNumber();
 
     }
 

@@ -335,7 +335,7 @@ public class Main extends Application {
     private void win() {
         textLabel.setText("Your wife is happy, you won! That's what matters the most! Wink wink.");
         setPickupVisibility(true);
-        pickupLabel.setText("VUUUUU!");
+        pickupLabel.setText("You won life!");
     }
 
 }

@@ -149,11 +149,11 @@ public class MapLoader {
                             new Window(cell);
                             break;
                         case '<':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.STAIR);
                             new StairUp(cell);
                             break;
                         case '>':
-                            cell.setType(CellType.FLOOR);
+                            cell.setType(CellType.STAIR);
                             new StairDown(cell);
                             break;
                         case '3':

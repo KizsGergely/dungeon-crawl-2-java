@@ -11,8 +11,6 @@ public class Player extends Actor {
     private boolean canPickupItem = false;
     private boolean isFighting = false;
     private boolean isKilledAMonster = false;
-    private boolean canGoToCellar = false;
-    private boolean canGoOut = false;
     private boolean hasCellarKey = false;
     private boolean hasGardenKey = false;
     private String killedMonsterName;
@@ -33,20 +31,22 @@ public class Player extends Actor {
         canPickupItem = false;
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (nextCell.getType() != CellType.WALL && nextCell.getActor() == null) {
-            if (!(nextCell.getType() == CellType.DOOR && !nextCell.getEnvironment().isAnOpenDoor())) {
-                nextCell.setActor(this);
-                if (nextCell.getItem() != null) {
-                    canPickupItem = true;
-                }
+            if (!(nextCell.getType() == CellType.DOOR && !nextCell.getEnvironment().isAnOpenDoor())) { //if it's not a closed door
                 if (nextCell.getEnvironment() instanceof StairDown) {
                     onLevel = 2;
-                    canGoToCellar = true;
                 } else if (nextCell.getEnvironment() instanceof StairUp) {
                     onLevel = 1;
                 }
-                cell.setActor(null);
-                cell = nextCell;
-                if (!isFighting) opponent = null;
+                else {
+                    nextCell.setActor(this);
+                    if (nextCell.getItem() != null) {
+                        canPickupItem = true;
+                    }
+
+                    cell.setActor(null);
+                    cell = nextCell;
+                    if (!isFighting) opponent = null;
+                }
             }
         }
     }
@@ -90,6 +90,10 @@ public class Player extends Actor {
         return inventory;
     }
 
+    public void setInventory(Inventory inv) {
+        inventory = inv;
+    }
+
     public boolean canPickup() {
         return canPickupItem;
     }
@@ -101,10 +105,6 @@ public class Player extends Actor {
     public boolean isKilledAMonster() { return isKilledAMonster; }
 
     public String getKilledMonsterName() { return killedMonsterName; }
-
-    public boolean canGoToCellar() {  //
-        return canGoToCellar;
-    }
 
     public int getLevelNumber() {
         return onLevel;

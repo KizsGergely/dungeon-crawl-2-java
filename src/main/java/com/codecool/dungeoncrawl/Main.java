@@ -24,7 +24,10 @@ import java.util.*;
 
 public class Main extends Application {
     int level = 1;
-    GameMap map = MapLoader.loadMap(level);
+    Player playa =
+    GameMap map1 = MapLoader.loadMap(1);
+    GameMap map2 = MapLoader.loadMap(2);
+    GameMap map = map1;
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
@@ -199,6 +202,13 @@ public class Main extends Application {
             for (int y = 0; y < map.getHeight(); y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
+                    if (cell.getEnvironment() != null) {
+                        if (level != player.getLevelNumber()) {
+//                        if (cell.getEnvironment().getTileName().equals("stairDown") ||
+//                            cell.getEnvironment().getTileName().equals("stairUp")) {
+                            changeMap();
+                        }
+                    }
                     Tiles.drawTile(context, cell.getActor(), x - minX, y-minY);
                 } else if (cell.getItem() != null) {
                     Tiles.drawTile(context, cell.getItem(), x - minX, y - minY);
@@ -216,6 +226,7 @@ public class Main extends Application {
         if (player.isFighting()) getMonsterStats();
         else hideMonsterStats();
 //        level = player.getLevelNumber();
+//        System.out.println(player.getX());
 
     }
 
@@ -285,11 +296,32 @@ public class Main extends Application {
         }
     }
 
-    private void changeMapToCellar() {
-        map = MapLoader.loadMap(level);
+    private void changeMap() {
+        Inventory originalInventory = inventory;
+        GameMap currentMap = map;
+//        player.setX(3);
+        level = player.getLevelNumber();
+        switch (level) {
+            case 1:
+                player.setX(5);
+                map2 = currentMap;
+                map = map1;
+                break;
+            case 2:
+//                player.setX(5);
+                map1 = currentMap;
+                map = map2;
+                break;
+        }
+//        this.map = MapLoader.loadMap(level);
+//        System.out.println(player);
+//                            map.setPlayer(originalPlayer);
+        player = map.getPlayer();
+        player.setInventory(originalInventory);
+//        System.out.println(player);
+        groupMonsters();
+        moveMonsters();
+        refresh();
     }
 
-//    private void mapChanger() {
-//        map = level == 1 ? map1 : map2;
-//    }
 }

@@ -13,7 +13,7 @@ public abstract class Actor implements Drawable {
     protected Cell cell;
     protected String name;
     protected int health = 10;
-    protected int attack = 3;
+    protected int attack = 5;
     protected int defense = 2;
 
     public Actor(Cell cell) {
@@ -28,6 +28,21 @@ public abstract class Actor implements Drawable {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
+        }
+    }
+    public void moveActors(int dx, int dy, int width, int height) {
+        int currentX = this.getX();
+        int currentY = this.getY();
+        if (currentX + dx < width &&
+                currentX + dx >= 0 &&
+                currentY + dy < height &&
+                currentY + dy >= 0) {
+            Cell nextCell = cell.getNeighbor(dx, dy);
+            if (nextCell.getActor() == null) {
+                cell.setActor(null);
+                nextCell.setActor(this);
+                cell = nextCell;
+            }
         }
     }
 
@@ -53,7 +68,7 @@ public abstract class Actor implements Drawable {
     }
 
     public void changeHealth(int dh) {
-        this.health = Math.max(health + dh, 0);
+        this.health = health - dh;
     }
 
     public boolean checkIfDead() {

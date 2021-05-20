@@ -4,34 +4,53 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Direction;
 
 public class Scrub extends Actor{
+	private int lightDistance = 3;
 	public Scrub(Cell cell) {
 		super(cell);
 	}
 
 	@Override
 	public String getTileName() {
-		return "scrub";
+		return "Scrub";
 	}
 
-	private void moveScrub(int dx, int dy, int width, int height) {
-		int currentX = this.getX();
-		int currentY = this.getY();
-		if (currentX + dx < width &&
-			currentX + dx >= 0 &&
-			currentY + dy < height &&
-			currentY + dy >= 0) {
-			Cell nextCell = cell.getNeighbor(dx, dy);
-			if (nextCell.getActor() == null) {
-				cell.setActor(null);
-				nextCell.setActor(this);
-				cell = nextCell;
+	public void moveScrub(int playerX, int playerY, boolean hasTorch) {
+		int scrubX = this.getX();
+		int scrubY = this.getY();
+		int distanceX = scrubX - playerX;
+		int distanceY = scrubY - playerY;
+		if (hasTorch) {
+			if (Math.abs(distanceY) > Math.abs(distanceX)) {
+				if (distanceY >= -lightDistance || distanceY >= lightDistance) {
+					direction = Direction.NORTH;
+				} else {
+					direction = Direction.SOUTH;
+				}
+			} else {
+				if (distanceX >= -lightDistance || distanceX >= lightDistance) {
+					direction = Direction.WEST;
+				} else {
+					direction = Direction.EAST;
+				}
+			}
+
+		} else {
+			if (Math.abs(distanceX) < Math.abs(distanceY)) {
+				if (distanceY < 0) {
+					direction = Direction.SOUTH;
+				} else {
+					direction = Direction.NORTH;
+				}
+			} else {
+				if (distanceX < 0) {
+					direction = Direction.EAST;
+				} else {
+					direction = Direction.WEST;
+				}
 			}
 		}
-	}
 
-	public void moveGhostRandomly(int width, int height) {
-		direction = Direction.values()[random.nextInt(4)];
-		moveScrub(direction.getDx(), direction.getDy(), width, height);
+		move(direction.getDx(), direction.getDy());
 	}
 
 }

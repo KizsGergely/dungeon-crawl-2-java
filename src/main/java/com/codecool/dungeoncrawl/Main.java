@@ -37,6 +37,7 @@ public class Main extends Application {
     Inventory inventory = player.getInventory();
     ArrayList<Cat> cats = new ArrayList<>();
     ArrayList<Ghost> ghosts = new ArrayList<>();
+    ArrayList<Scrub> scrubs = new ArrayList<>();
     ArrayList<Wife> wives = new ArrayList<>();
     Label playerNameLabel = new Label();
     Label playerHealthLabel = new Label();
@@ -123,7 +124,7 @@ public class Main extends Application {
                 break;
         }
         player.attackIfEncounter(dx, dy);
-        removeMonstersIfDead(ghosts);
+        removeMonstersIfDead(ghosts, scrubs);
         restartGameIfDead();
         player.move(dx, dy);
         if (level != player.getLevelNumber()) changeMap();
@@ -137,8 +138,9 @@ public class Main extends Application {
         }
     }
 
-    private void removeMonstersIfDead(ArrayList<Ghost> ghosts) {
+    private void removeMonstersIfDead(ArrayList<Ghost> ghosts, ArrayList<Scrub> scrubs) {
         int ghostIndex = -1;
+        int scrubIndex = -1;
         // remove monster from map
         for (int i = 0; i < ghosts.size(); i++) {
             if (ghosts.get(i).checkIfDead()) {
@@ -147,9 +149,19 @@ public class Main extends Application {
                 break;
             }
         }
+        for (int i = 0; i < scrubs.size(); i++) {
+            if (scrubs.get(i).checkIfDead()) {
+                scrubs.get(i).getCell().setActor(null);
+                scrubIndex = i;
+                break;
+            }
+        }
         // remove monster from the list where it is collected with the other similar monsters
         if (ghostIndex > -1) {
             ghosts.remove(ghostIndex);
+        }
+        if (scrubIndex > -1) {
+            scrubs.remove(scrubIndex);
         }
     }
 
@@ -167,6 +179,9 @@ public class Main extends Application {
                         case "Wife":
                             wives.add((Wife) map.getCell(x, y).getActor());
                             break;
+                        case "Scrub":
+                            scrubs.add((Scrub) map.getCell(x, y).getActor());
+                            break;
                     }
                 }
             }
@@ -179,6 +194,9 @@ public class Main extends Application {
         }
         for (Ghost ghost: ghosts) {
             ghost.moveGhostRandomly(map.getWidth(), map.getHeight());
+        }
+        for (Scrub scrub: scrubs) {
+            scrub.moveScrub(player.getX(), player.getY(), player.hasTorch());
         }
     }
 

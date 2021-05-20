@@ -27,6 +27,23 @@ public class Inventory {
         return false;
     }
 
+    public boolean hasBulb() {
+        for (Map.Entry<String, Integer> item: inventory.entrySet()) {
+            if (item.getKey().equals("light bulb")) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean hasRing() {
+        for (Map.Entry<String, Integer> item: inventory.entrySet()) {
+            if (item.getKey().equals("Ring")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean hasCellarKey() {
         return hasCellarKey;
     }

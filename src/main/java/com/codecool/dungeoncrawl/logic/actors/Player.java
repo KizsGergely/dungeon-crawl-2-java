@@ -2,12 +2,9 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.environment.StairDown;
-import com.codecool.dungeoncrawl.logic.environment.StairUp;
 import com.codecool.dungeoncrawl.logic.items.*;
-import com.codecool.dungeoncrawl.logic.environment.CuttedGrass;
-import com.codecool.dungeoncrawl.logic.environment.Environment;
-import com.codecool.dungeoncrawl.logic.environment.Grass;
+import com.codecool.dungeoncrawl.logic.environment.*;
+
 
 public class Player extends Actor {
     private Inventory inventory = new Inventory();
@@ -17,9 +14,11 @@ public class Player extends Actor {
     private boolean isKilledAMonster = false;
     private boolean hasCellarKey = false;
     private boolean hasGardenKey = false;
+    private boolean isGrassCut = false;
     private String killedMonsterName;
     private Actor opponent;
     private int onLevel = 1;
+    private int grassToCut;
 
     public Player(Cell cell) {
         super(cell);
@@ -122,6 +121,10 @@ public class Player extends Actor {
 
     public boolean isFighting() { return isFighting; }
 
+    public void setGrassToCut(int grassNumber){
+        grassToCut = grassNumber;
+    }
+
     public Actor getOpponent() { return opponent; }
 
     public boolean isKilledAMonster() { return isKilledAMonster; }
@@ -147,6 +150,12 @@ public class Player extends Actor {
         Environment floor = cell.getEnvironment();
         if (floor instanceof Grass) {
             cell.setEnvironment(new CuttedGrass(cell));
+            System.out.println("die fű die");
+            System.out.println(grassToCut);
+            grassToCut -= 1;
+            if (grassToCut == 0){
+                isGrassCut = true;
+            }
         }
     }
 }

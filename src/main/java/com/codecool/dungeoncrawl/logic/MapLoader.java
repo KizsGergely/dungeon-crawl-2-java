@@ -3,7 +3,6 @@ package com.codecool.dungeoncrawl.logic;
 import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.items.*;
 import com.codecool.dungeoncrawl.logic.environment.*;
-import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.io.InputStream;
 import java.util.Scanner;
@@ -67,6 +66,7 @@ public class MapLoader {
                         case '+':
                             cell.setType(CellType.FLOOR);
                             new Grass(cell);
+                            map.raiseGrassCounter();
                             break;
                         case '-':
                             cell.setType(CellType.FLOOR);

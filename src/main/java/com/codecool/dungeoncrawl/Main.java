@@ -98,6 +98,7 @@ public class Main extends Application {
         primaryStage.setTitle("lwarC noegnuD");
         primaryStage.show();
         groupMonsters();
+        player.setGrassToCut(map.getGrassCounter());
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {

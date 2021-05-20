@@ -4,6 +4,8 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.*;
+import com.codecool.dungeoncrawl.logic.environment.CellarDoor;
+import com.codecool.dungeoncrawl.logic.environment.GardenDoor;
 import com.codecool.dungeoncrawl.logic.items.Inventory;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -21,14 +23,17 @@ import javafx.stage.Stage;
 import java.util.*;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap();
+    int level = 1;
+    GameMap map1 = MapLoader.loadMap(1);
+    GameMap map2 = MapLoader.loadMap(2);
+    Player player = new Player(map1.getCell(6, 15));
+    GameMap map = map1;
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     GridPane ui = new GridPane();
     GridPane textUi = new GridPane();
-    Player player = map.getPlayer();
     Inventory inventory = player.getInventory();
     ArrayList<Cat> cats = new ArrayList<>();
     ArrayList<Ghost> ghosts = new ArrayList<>();
@@ -90,9 +95,10 @@ public class Main extends Application {
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
 
-        primaryStage.setTitle("Dungeon Crawl");
+        primaryStage.setTitle("lwarC noegnuD");
         primaryStage.show();
         groupMonsters();
+        player.setGrassToCut(map.getGrassCounter());
 
     }
 
@@ -122,8 +128,8 @@ public class Main extends Application {
         removeMonstersIfDead(ghosts, scrubs);
         restartGameIfDead();
         player.move(dx, dy);
+        if (level != player.getLevelNumber()) changeMap();
         refresh();
-
     }
 
     private void restartGameIfDead() {
@@ -197,14 +203,13 @@ public class Main extends Application {
 
     private void refresh() {
 //        context.setFill(Color.BLACK);
-        System.out.println(map.getGrassCounter());
         context.setFill(Color.color(0.278431373F,0.176470588F,0.235294118F));
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        int minX = Math.max(map.getPlayer().getX() - viewHorizontal, 0);
-        int maxX = Math.min(map.getWidth(),map.getPlayer().getX() + viewHorizontal);
-        int minY = Math.max(map.getPlayer().getY() - viewVertical, 0);
-        int maxY = Math.min(map.getHeight(),map.getPlayer().getY() + viewVertical);
+        int minX = Math.max(player.getX() - viewHorizontal, 0);
+        int maxX = Math.min(map.getWidth(),player.getX() + viewHorizontal);
+        int minY = Math.max(player.getY() - viewVertical, 0);
+        int maxY = Math.min(map.getHeight(),player.getY() + viewVertical);
 
         if(minX == 0) maxX = Math.min(2 * viewHorizontal + 1, map.getWidth() -1);
         if(minY == 0) maxY = Math.min(2 * viewVertical + 1, map.getHeight() -1);
@@ -225,20 +230,28 @@ public class Main extends Application {
                 }
             }
         }
+
         if (player.canPickup()) pickup();
         inventoryLabel.setText(player.getInventory().toString());
         getPlayerStats();
         if (player.isFighting()) getMonsterStats();
         else hideMonsterStats();
+//        level = player.getLevelNumber();
+//        System.out.println(player.getX());
+
     }
+
     private void pickup() {
         setPickupVisibility(true);
         yesPickupButton.setOnAction(event -> {
             player.pickupItem();
+            if (player.hasCellarKey()) openCellarDoor();
+            if (player.hasGardenKey()) openGardenDoor();
             refresh();
             setPickupVisibility(false);
         });
         noPickupButton.setOnAction(event -> setPickupVisibility(false));
+
     }
 
     private void setPickupVisibility(boolean state) {
@@ -273,4 +286,54 @@ public class Main extends Application {
         monsterDefenseLabel.setText("");
         textLabel.setText("");
     }
+
+    private void openCellarDoor() {
+        for (int y = 0; y < map.getHeight(); y++) {
+            for (int x = 0; x <map.getWidth(); x++) {
+                if (map.getCell(x,y).getEnvironment() instanceof CellarDoor) {
+                    ((CellarDoor) map.getCell(x,y).getEnvironment()).setOpen();
+                }
+            }
+        }
+    }
+
+    private void openGardenDoor() {
+        for (int y = 0; y < map.getHeight(); y++) {
+            for (int x = 0; x <map.getWidth(); x++) {
+                if (map.getCell(x,y).getEnvironment() instanceof GardenDoor) {
+                    ((GardenDoor) map.getCell(x,y).getEnvironment()).setOpen();
+                }
+            }
+        }
+    }
+
+    private void changeMap() {
+        GameMap currentMap = map;
+        map.setPlayer(null);
+        map.setCell(null, player.getX(), player.getY());
+        level = player.getLevelNumber();
+        switch (level) {
+            case 1:
+                map2 = currentMap;
+                map = map1;
+                break;
+            case 2:
+                map1 = currentMap;
+                map = map2;
+                break;
+        }
+        if (level == 1) {
+            map.setCell(player,2, 2);
+            player.setCell(map.getCell(2,2));
+        } else {
+            map.setCell(player,2, 10);
+            player.setCell(map.getCell(2,10));
+        }
+
+        map.setPlayer(player);
+        groupMonsters();
+        moveMonsters();
+        refresh();
+    }
+
 }

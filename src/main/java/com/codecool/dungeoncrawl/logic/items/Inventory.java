@@ -5,8 +5,8 @@ import java.util.Map;
 
 public class Inventory {
     private HashMap<String, Integer> inventory = new HashMap<>();
-    private GardenKey gardenKey;
-    private CellarKey cellarKey;
+    private boolean hasCellarKey = false;
+    private boolean hasGardenKey = false;
 
     public Inventory() {
     }
@@ -45,10 +45,14 @@ public class Inventory {
     }
 
     public boolean hasCellarKey() {
-        return cellarKey != null;
+        return hasCellarKey;
     }
 
-    public boolean hasGardenKey() { return gardenKey != null; }
+    public boolean hasGardenKey() { return hasGardenKey; }
+
+    public void pickupCellarKey() { hasCellarKey = true; }
+
+    public void pickupGardenKey() { hasGardenKey = true; }
 
     @Override
     public String toString() {

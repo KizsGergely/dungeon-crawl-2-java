@@ -27,10 +27,13 @@ public class GameMap {
         return cells[x][y];
     }
 
+    public void setCell(Player player, int x, int y) {
+        cells[x][y].setActor(player);
+    }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
-
 
     public Cat getCat() {
         return cat;
@@ -45,6 +48,7 @@ public class GameMap {
         return player;
     }
 
+
     public int getWidth() {
         return width;
     }
@@ -55,10 +59,8 @@ public class GameMap {
 
     public int getGrassCounter(){return grassCounter;}
 
-    public void setGrassCounter(){
+    public void raiseGrassCounter(){
         grassCounter += 1;
     }
-    public void lowerGrassCounter(){
-        grassCounter -= 1;
-    }
+
 }

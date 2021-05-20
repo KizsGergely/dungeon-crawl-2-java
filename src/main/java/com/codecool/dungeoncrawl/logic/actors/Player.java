@@ -2,11 +2,8 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.GameMap;
-import com.codecool.dungeoncrawl.logic.environment.CuttedGrass;
-import com.codecool.dungeoncrawl.logic.environment.Environment;
-import com.codecool.dungeoncrawl.logic.environment.Grass;
 import com.codecool.dungeoncrawl.logic.items.*;
+import com.codecool.dungeoncrawl.logic.environment.*;
 
 
 public class Player extends Actor {
@@ -15,16 +12,17 @@ public class Player extends Actor {
     private boolean canPickupItem = false;
     private boolean isFighting = false;
     private boolean isKilledAMonster = false;
+    private boolean hasCellarKey = false;
+    private boolean hasGardenKey = false;
     private boolean isGrassCut = false;
     private String killedMonsterName;
     private Actor opponent;
-    private GameMap map;
+    private int onLevel = 1;
+    private int grassToCut;
 
-
-    public Player(Cell cell, GameMap gameMap) {
+    public Player(Cell cell) {
         super(cell);
         name = "Player";
-        this.map = gameMap;
     }
 
     public String getTileName() {
@@ -35,15 +33,24 @@ public class Player extends Actor {
     public void move(int dx, int dy) {
         canPickupItem = false;
         Cell nextCell = cell.getNeighbor(dx, dy);
-        if (nextCell.getType() != CellType.WALL &&
-                nextCell.getActor() == null) {
-            nextCell.setActor(this);
-            if (nextCell.getItem() != null) {
-                canPickupItem = true;
+        if (nextCell.getType() != CellType.WALL && nextCell.getActor() == null) {
+            if (!(nextCell.getType() == CellType.DOOR && !nextCell.getEnvironment().isAnOpenDoor())) { //if it's not a closed door
+                if (nextCell.getEnvironment() instanceof StairDown) {
+                    onLevel = 2;
+                } else if (nextCell.getEnvironment() instanceof StairUp) {
+                    onLevel = 1;
+                }
+                else {
+                    nextCell.setActor(this);
+                    if (nextCell.getItem() != null) {
+                        canPickupItem = true;
+                    }
+
+                    cell.setActor(null);
+                    cell = nextCell;
+                    if (!isFighting) opponent = null;
+                }
             }
-            cell.setActor(null);
-            cell = nextCell;
-            if (!isFighting) opponent = null;
         }
         mowTheLawn();
     }
@@ -53,6 +60,10 @@ public class Player extends Actor {
         if (item instanceof Apple || item instanceof Pear) health += 4;
         else if (item instanceof Carrot) health += 3;
         else if (item instanceof Cheese || item instanceof Bread) health += 2;
+        if (item instanceof CellarKey) inventory.pickupCellarKey();
+        if (item instanceof GardenKey) inventory.pickupGardenKey();
+        if (inventory.hasCellarKey()) hasCellarKey = true;
+        if (inventory.hasGardenKey()) hasGardenKey = true;
         if (item instanceof Torch) hasTorch = true;
         // if player collects food, it increases health but won't be in inventory
         if (!item.isFood()) {
@@ -100,17 +111,37 @@ public class Player extends Actor {
         return inventory;
     }
 
+    public void setInventory(Inventory inv) {
+        inventory = inv;
+    }
+
     public boolean canPickup() {
         return canPickupItem;
     }
 
     public boolean isFighting() { return isFighting; }
 
+    public void setGrassToCut(int grassNumber){
+        grassToCut = grassNumber;
+    }
+
     public Actor getOpponent() { return opponent; }
 
     public boolean isKilledAMonster() { return isKilledAMonster; }
 
     public String getKilledMonsterName() { return killedMonsterName; }
+
+    public int getLevelNumber() {
+        return onLevel;
+    }
+
+    public boolean hasCellarKey() {
+        return hasCellarKey;
+    }
+
+    public boolean hasGardenKey() {
+        return hasGardenKey;
+    }
 
     public boolean hasTorch() {
         return hasTorch;
@@ -119,8 +150,10 @@ public class Player extends Actor {
         Environment floor = cell.getEnvironment();
         if (floor instanceof Grass) {
             cell.setEnvironment(new CuttedGrass(cell));
-            map.lowerGrassCounter();
-            if (map.getGrassCounter() == 0){
+            System.out.println("die fű die");
+            System.out.println(grassToCut);
+            grassToCut -= 1;
+            if (grassToCut == 0){
                 isGrassCut = true;
             }
         }

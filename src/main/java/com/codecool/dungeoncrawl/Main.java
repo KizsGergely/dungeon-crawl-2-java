@@ -143,14 +143,14 @@ public class Main extends Application {
         }
         player.attackIfEncounter(dx, dy);
         removeMonstersIfDead(ghosts, scrubs);
-        restartGameIfDead();
+        checkIfDead();
         player.move(dx, dy);
         if (level != player.getLevelNumber()) changeMap();
         if (player.isWifeHappy()) win();
         refresh();
     }
 
-    private void restartGameIfDead() {
+    private void checkIfDead() {
         if (player.checkIfDead()) {
             Label endText = new Label("Oops! You're dead!");
             Button endButton = new Button("I know! :(");
@@ -272,6 +272,8 @@ public class Main extends Application {
     private void pickup() {
         setPickupVisibility(true);
         yesPickupButton.setOnAction(event -> {
+            if (player.isWifeHappy() && player.getCell().getItem() == null)
+                System.exit(0);
             player.pickupItem();
             if (player.hasCellarKey()) openCellarDoor();
             if (player.hasGardenKey()) openGardenDoor();
@@ -375,7 +377,7 @@ public class Main extends Application {
     private void win() {
         textLabel.setText("Your wife is happy, you won! That's what matters the most! Wink wink.");
         setPickupVisibility(true);
-        pickupLabel.setText("You won life!");
+        pickupLabel.setText("Your wife is happy!\nYou won life!");
     }
 
 }

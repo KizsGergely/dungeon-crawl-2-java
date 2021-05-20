@@ -11,7 +11,7 @@ public class Ghost extends Actor{
 
 	@Override
 	public String getTileName() {
-		return "Ghost";
+		return "Ghost of your mother-in-law";
 	}
 
 

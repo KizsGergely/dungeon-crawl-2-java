@@ -1,5 +1,6 @@
 package com.codecool.dungeoncrawl;
 
+import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
@@ -15,6 +16,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -22,6 +26,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class Main extends Application {
@@ -56,6 +61,7 @@ public class Main extends Application {
     Button noPickupButton = new Button("No");
     int viewHorizontal = 17;
     int viewVertical = 13;
+    GameDatabaseManager dbManager;
 
     public static void main(String[] args) {
         launch(args);
@@ -63,6 +69,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        setupDbManager();
         Label welcome = new Label("Welcome!\n\nPlease enter your name:");
         TextField nameInput = new TextField("What is your name? ");
         Button confirm = new Button("OK");
@@ -114,9 +121,20 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
+        scene.setOnKeyReleased(this::onKeyReleased);
 
         groupMonsters();
         player.setGrassToCut(map.getGrassCounter());
+    }
+
+    private void onKeyReleased(KeyEvent keyEvent) {
+        KeyCombination exitCombinationMac = new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN);
+        KeyCombination exitCombinationWin = new KeyCodeCombination(KeyCode.F4, KeyCombination.ALT_DOWN);
+        if (exitCombinationMac.match(keyEvent)
+                || exitCombinationWin.match(keyEvent)
+                || keyEvent.getCode() == KeyCode.ESCAPE) {
+            exit();
+        }
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -140,6 +158,10 @@ public class Main extends Application {
                 dx = 1;
                 dy = 0;
                 break;
+            case S:
+                Player player = map.getPlayer();
+                dbManager.savePlayer(player);
+                break;
         }
         player.attackIfEncounter(dx, dy);
         removeMonstersIfDead(ghosts, scrubs);
@@ -148,6 +170,24 @@ public class Main extends Application {
         if (level != player.getLevelNumber()) changeMap();
         if (player.isWifeHappy()) win();
         refresh();
+    }
+
+    private void setupDbManager() {
+        dbManager = new GameDatabaseManager();
+        try {
+            dbManager.setup();
+        } catch (SQLException ex) {
+            System.out.println("Cannot connect to database.");
+        }
+    }
+
+    private void exit() {
+        try {
+            stop();
+        } catch (Exception e) {
+            System.exit(1);
+        }
+        System.exit(0);
     }
 
     private void checkIfDead() {

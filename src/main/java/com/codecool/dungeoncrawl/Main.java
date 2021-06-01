@@ -2,8 +2,8 @@ package com.codecool.dungeoncrawl;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
@@ -30,7 +30,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.io.*;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -179,6 +178,7 @@ public class Main extends Application {
 //                }
 
 //                ObjectMapper mapper = new ObjectMapper();
+//                mapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
 //                String jsonResult = null;
 //                try {
 //                    jsonResult = mapper.writeValueAsString(this.player);
@@ -186,19 +186,22 @@ public class Main extends Application {
 //                    e.printStackTrace();
 //                }
 //                System.out.println(jsonResult);
-                System.out.println(this.player);
-                try{
-                    //Creating the object
-                    //Creating stream and writing the object
-                    FileOutputStream fout=new FileOutputStream("f.txt");
-                    ObjectOutputStream out=new ObjectOutputStream(fout);
-                    out.writeObject(map);
-                    out.flush();
-                    //closing the stream
-                    out.close();
-                    System.out.println("success");
-                }catch(Exception e){System.out.println("create object " + e);}
 
+
+
+//                System.out.println(this.player);
+//                try{
+//                    //Creating the object
+//                    //Creating stream and writing the object
+//                    FileOutputStream fout=new FileOutputStream("f.txt");
+//                    ObjectOutputStream out=new ObjectOutputStream(fout);
+//                    out.writeObject(player);
+//                    out.flush();
+//                    //closing the stream
+//                    out.close();
+//                    System.out.println("success");
+//                }catch(Exception e){System.out.println("create object " + e);}
+//
 //                try{
 //                    //Creating stream to read the object
 //                    ObjectInputStream in=new ObjectInputStream(new FileInputStream("f.txt"));
@@ -218,6 +221,7 @@ public class Main extends Application {
 //                }catch(Exception e){System.out.println("create stream " + e);}
 //                System.out.println(this.player);
 
+                dbManager.getPlayer(player);
                 break;
         }
 
@@ -326,7 +330,7 @@ public class Main extends Application {
             ghost.moveGhostRandomly(map.getWidth(), map.getHeight());
         }
         for (Scrub scrub: scrubs) {
-            scrub.moveScrub(player.getX(), player.getY(), player.hasTorch());
+            scrub.moveScrub(player.getX(), player.getY(), player.getHasTorch());
         }
     }
 

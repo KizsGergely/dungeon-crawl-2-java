@@ -8,8 +8,8 @@ import com.codecool.dungeoncrawl.logic.environment.*;
 import java.io.Serializable;
 
 
-public class Player extends Actor {
-    private Inventory inventory = new Inventory();
+public class Player extends Actor implements Serializable {
+    private transient Inventory inventory = new Inventory();
     private boolean hasTorch = false;
     private boolean canPickupItem = false;
     private boolean isFighting = false;
@@ -171,13 +171,14 @@ public class Player extends Actor {
         return grassToCut;
     }
 
-    public boolean isCatFed() {
+    public boolean getIsCatFed() {
         return isCatFed;
     }
 
-    public boolean hasTorch() {
+    public boolean getHasTorch() {
         return hasTorch;
     }
+
     public void mowTheLawn() {
         Environment floor = cell.getEnvironment();
         if (floor instanceof Grass) {

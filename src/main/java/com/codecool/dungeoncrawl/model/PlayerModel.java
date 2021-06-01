@@ -13,7 +13,6 @@ public class PlayerModel extends BaseModel {
     private boolean isGrassCut;
     private int grassToCut;
     private int onLevel;
-    private boolean isWifeHappy;
 
     public PlayerModel(String playerName, int x, int y) {
         this.playerName = playerName;
@@ -28,11 +27,10 @@ public class PlayerModel extends BaseModel {
         this.defense = player.getDefense();
         this.x = player.getX();
         this.y = player.getY();
-        this.isCatFed = player.isCatFed();
+        this.isCatFed = player.getIsCatFed();
         this.isGrassCut = player.isGrassCut();
         this.grassToCut = player.getGrassToCut();
         this.onLevel = player.getLevelNumber();
-        this.isWifeHappy = player.isWifeHappy();
     }
 
 
@@ -114,13 +112,5 @@ public class PlayerModel extends BaseModel {
 
     public void setOnLevel(int onLevel) {
         this.onLevel = onLevel;
-    }
-
-    public boolean isWifeHappy() {
-        return isWifeHappy;
-    }
-
-    public void setWifeHappy(boolean wifeHappy) {
-        isWifeHappy = wifeHappy;
     }
 }

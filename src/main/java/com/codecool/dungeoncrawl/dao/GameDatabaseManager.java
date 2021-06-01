@@ -2,9 +2,14 @@ package com.codecool.dungeoncrawl.dao;
 
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.model.PlayerModel;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 
 public class GameDatabaseManager {
@@ -18,6 +23,26 @@ public class GameDatabaseManager {
     public void savePlayer(Player player) {
         PlayerModel model = new PlayerModel(player);
         playerDao.add(model);
+    }
+
+    public void getPlayer(Player player) {
+        PlayerModel model = new PlayerModel(player);
+        model.setId(1);  // change
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
+        String jsonResult = null;
+        try {
+            jsonResult = mapper.writeValueAsString(model);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        System.out.println(jsonResult);
+        try {
+            mapper.writeValue(Paths.get("playermodel.json").toFile(), model);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private DataSource connect() throws SQLException {

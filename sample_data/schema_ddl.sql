@@ -1,3 +1,6 @@
+ALTER TABLE IF EXISTS public.game_state DROP CONSTRAINT IF EXISTS fk_player_id;
+ALTER TABLE IF EXISTS public.inventory DROP CONSTRAINT IF EXISTS fk_player_id;
+
 DROP TABLE IF EXISTS public.game_state;
 CREATE TABLE public.game_state (
     id serial NOT NULL PRIMARY KEY,
@@ -17,11 +20,10 @@ CREATE TABLE public.player (
     defense integer NOT NULL,
     x integer NOT NULL,
     y integer NOT NULL,
-    isCatFed boolean NOT NULL,
-    isGrassCut boolean NOT NULL,
-    grassToCut boolean NOT NULL,
-    isWifeHappy boolean NOT NULL,
-    onLevel integer NOT NULL
+    is_cat_fed boolean NOT NULL,
+    is_grass_cut boolean NOT NULL,
+    grass_to_cut integer NOT NULL,
+    on_level integer NOT NULL
 );
 
 DROP TABLE IF EXISTS public.monster;
@@ -36,10 +38,9 @@ CREATE TABLE public.monster (
 );
 
 --todo: write sql table for every monster
---wife:
---cat:
 
 DROP TABLE IF EXISTS public.inventory;
+
 CREATE TABLE public.inventory (
     id serial NOT NULL PRIMARY KEY,
     player_id integer NOT NULL,

@@ -165,7 +165,7 @@ public class Main extends Application {
                 dy = 0;
                 break;
             case S:
-                Player player = map.getPlayer();
+//                Player player = map.getPlayer();
                 dbManager.savePlayer(player);
                 break;
             case H:
@@ -477,9 +477,9 @@ public class Main extends Application {
         textLabel.setText("Your wife is happy, you won! That's what matters the most! Wink wink.");
         setPickupVisibility(true);
         pickupLabel.setText("Your wife is happy!\nYou won life!");
-        Gson gson = new Gson();
-        String json = gson.toJson(player);
-        System.out.println(json);
+//        Gson gson = new Gson();
+//        String json = gson.toJson(player);
+//        System.out.println(json);
     }
 
 }

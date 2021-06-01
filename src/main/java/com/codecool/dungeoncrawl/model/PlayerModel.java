@@ -5,8 +5,15 @@ import com.codecool.dungeoncrawl.logic.actors.Player;
 public class PlayerModel extends BaseModel {
     private String playerName;
     private int hp;
+    private int attack;
+    private int defense;
     private int x;
     private int y;
+    private boolean isCatFed;
+    private boolean isGrassCut;
+    private int grassToCut;
+    private int onLevel;
+    private boolean isWifeHappy;
 
     public PlayerModel(String playerName, int x, int y) {
         this.playerName = playerName;
@@ -16,12 +23,18 @@ public class PlayerModel extends BaseModel {
 
     public PlayerModel(Player player) {
         this.playerName = player.getName();
+        this.hp = player.getHealth();
+        this.attack = player.getAttack();
+        this.defense = player.getDefense();
         this.x = player.getX();
         this.y = player.getY();
-
-        this.hp = player.getHealth();
-
+        this.isCatFed = player.isCatFed();
+        this.isGrassCut = player.isGrassCut();
+        this.grassToCut = player.getGrassToCut();
+        this.onLevel = player.getLevelNumber();
+        this.isWifeHappy = player.isWifeHappy();
     }
+
 
     public String getPlayerName() {
         return playerName;
@@ -53,5 +66,61 @@ public class PlayerModel extends BaseModel {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    public boolean isCatFed() {
+        return isCatFed;
+    }
+
+    public void setCatFed(boolean catFed) {
+        isCatFed = catFed;
+    }
+
+    public boolean isGrassCut() {
+        return isGrassCut;
+    }
+
+    public void setGrassCut(boolean grassCut) {
+        isGrassCut = grassCut;
+    }
+
+    public int getGrassToCut() {
+        return grassToCut;
+    }
+
+    public void setGrassToCut(int grassToCut) {
+        this.grassToCut = grassToCut;
+    }
+
+    public int getOnLevel() {
+        return onLevel;
+    }
+
+    public void setOnLevel(int onLevel) {
+        this.onLevel = onLevel;
+    }
+
+    public boolean isWifeHappy() {
+        return isWifeHappy;
+    }
+
+    public void setWifeHappy(boolean wifeHappy) {
+        isWifeHappy = wifeHappy;
     }
 }

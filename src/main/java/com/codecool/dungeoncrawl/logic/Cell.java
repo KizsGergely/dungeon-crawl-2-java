@@ -5,12 +5,14 @@ import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.environment.Environment;
 
-public class Cell implements Drawable {
+import java.io.Serializable;
+
+public class Cell implements Drawable, Serializable {
     private CellType type;
-    private Actor actor;
-    private Item item;
-    private Environment environment;
-    private GameMap gameMap;
+    private transient Actor actor;
+    private transient Item item;
+    private transient Environment environment;
+    private transient GameMap gameMap;
     private int x, y;
 
     Cell(GameMap gameMap, int x, int y, CellType type) {

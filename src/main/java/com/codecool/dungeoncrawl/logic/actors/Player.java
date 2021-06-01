@@ -5,6 +5,8 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.*;
 import com.codecool.dungeoncrawl.logic.environment.*;
 
+import java.io.Serializable;
+
 
 public class Player extends Actor {
     private Inventory inventory = new Inventory();
@@ -16,7 +18,7 @@ public class Player extends Actor {
     private boolean hasGardenKey = false;
     private boolean isGrassCut = false;
     private String killedMonsterName;
-    private Actor opponent;
+    private transient Actor opponent;
     private int onLevel = 1;
     private int grassToCut;
     private boolean hasRing = false;
@@ -85,7 +87,7 @@ public class Player extends Actor {
         boolean hasMeat = inventory.hasMeat();
         Cell nextCell = cell.getNeighbor(dx, dy);
         Actor monster = nextCell.getActor();
-        if (monster != null) {
+        if (monster != null && !(monster instanceof Player)) {
             if (monster instanceof Cat && hasMeat) {
                 // cat won't hurt the player anymore and no fight occurs
                 ((Cat) monster).reduceAttack();
@@ -161,6 +163,18 @@ public class Player extends Actor {
         return hasGardenKey;
     }
 
+    public boolean isGrassCut() {
+        return isGrassCut;
+    }
+
+    public int getGrassToCut() {
+        return grassToCut;
+    }
+
+    public boolean isCatFed() {
+        return isCatFed;
+    }
+
     public boolean hasTorch() {
         return hasTorch;
     }
@@ -180,4 +194,6 @@ public class Player extends Actor {
     public void setName(String name) {
         this.name = name;
     }
+
+
 }

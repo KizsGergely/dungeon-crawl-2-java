@@ -2,9 +2,10 @@ package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.*;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class GameMap {
+public class GameMap implements Serializable {
     private int width;
     private int height;
     private Cell[][] cells;

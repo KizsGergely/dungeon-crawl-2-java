@@ -4,7 +4,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Environment implements Drawable {
-    private Cell cell;
+    private transient Cell cell;
     private boolean isOpenDoor = false;
 
     public Environment(Cell cell) {

@@ -3,8 +3,10 @@ package com.codecool.dungeoncrawl.logic.items;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
-public abstract class Item implements Drawable {
-    private Cell cell;
+import java.io.Serializable;
+
+public abstract class Item implements Drawable, Serializable {
+    private transient Cell cell;
     protected boolean isFood = false;
 
     public Item(Cell cell) {

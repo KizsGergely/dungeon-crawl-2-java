@@ -1,5 +1,9 @@
 package com.codecool.dungeoncrawl;
 
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
@@ -26,6 +30,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.*;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -124,6 +129,7 @@ public class Main extends Application {
         scene.setOnKeyReleased(this::onKeyReleased);
 
         groupMonsters();
+
         player.setGrassToCut(map.getGrassCounter());
     }
 
@@ -162,7 +168,60 @@ public class Main extends Application {
                 Player player = map.getPlayer();
                 dbManager.savePlayer(player);
                 break;
+            case H:
+//                Gson gson = new Gson();
+//                String json = gson.toJson(this.player);
+//                System.out.println(json);
+//                try (FileWriter writer = new FileWriter("staff.json")) {
+//                    gson.toJson(this.player, writer);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+
+//                ObjectMapper mapper = new ObjectMapper();
+//                String jsonResult = null;
+//                try {
+//                    jsonResult = mapper.writeValueAsString(this.player);
+//                } catch (JsonProcessingException e) {
+//                    e.printStackTrace();
+//                }
+//                System.out.println(jsonResult);
+                System.out.println(this.player);
+                try{
+                    //Creating the object
+                    //Creating stream and writing the object
+                    FileOutputStream fout=new FileOutputStream("f.txt");
+                    ObjectOutputStream out=new ObjectOutputStream(fout);
+                    out.writeObject(map);
+                    out.flush();
+                    //closing the stream
+                    out.close();
+                    System.out.println("success");
+                }catch(Exception e){System.out.println("create object " + e);}
+
+//                try{
+//                    //Creating stream to read the object
+//                    ObjectInputStream in=new ObjectInputStream(new FileInputStream("f.txt"));
+//                    Player s=(Player)in.readObject();
+//                    //printing the data of the serialized object
+//                    System.out.println(s.getName());
+//                    this.player = s;
+//                    map.setPlayer(this.player);
+//                    System.out.println("set player");
+//                    map.setCell(this.player, this.player.getX(), this.player.getY());
+//                    System.out.println("set map cell");
+//                    this.player.setCell(map.getCell(this.player.getX(), this.player.getY()));
+//                    System.out.println("set player cell");
+//
+//                    //closing the stream
+//                    in.close();
+//                }catch(Exception e){System.out.println("create stream " + e);}
+//                System.out.println(this.player);
+
+                break;
         }
+
+
         player.attackIfEncounter(dx, dy);
         removeMonstersIfDead(ghosts, scrubs);
         checkIfDead();
@@ -418,6 +477,9 @@ public class Main extends Application {
         textLabel.setText("Your wife is happy, you won! That's what matters the most! Wink wink.");
         setPickupVisibility(true);
         pickupLabel.setText("Your wife is happy!\nYou won life!");
+        Gson gson = new Gson();
+        String json = gson.toJson(player);
+        System.out.println(json);
     }
 
 }

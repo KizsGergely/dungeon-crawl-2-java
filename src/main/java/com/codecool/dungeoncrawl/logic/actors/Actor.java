@@ -5,9 +5,10 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Direction;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public abstract class Actor implements Drawable {
+public abstract class Actor implements Drawable, Serializable {
     protected Random random = new Random();
     protected Direction direction;
     protected Cell cell;

@@ -1,9 +1,10 @@
 package com.codecool.dungeoncrawl.logic.items;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Inventory {
+public class Inventory implements Serializable {
     private HashMap<String, Integer> inventory = new HashMap<>();
     private boolean hasCellarKey = false;
     private boolean hasGardenKey = false;

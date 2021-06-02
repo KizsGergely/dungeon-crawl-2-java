@@ -1,13 +1,12 @@
 package com.codecool.dungeoncrawl;
 
 
+import com.codecool.dungeoncrawl.logic.*;
+import com.codecool.dungeoncrawl.logic.Cell;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
-import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.GameMap;
-import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.environment.CellarDoor;
 import com.codecool.dungeoncrawl.logic.environment.GardenDoor;
@@ -17,9 +16,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -66,6 +63,7 @@ public class Main extends Application {
     int viewHorizontal = 17;
     int viewVertical = 13;
     GameDatabaseManager dbManager;
+    ModalHandler modal = new ModalHandler();
 
     public static void main(String[] args) {
         launch(args);
@@ -115,13 +113,26 @@ public class Main extends Application {
         textUi.add(new Label(" "), 0, 2);
         textUi.add(textLabel, 4, 3);
 
+        MenuBar menuBar = new MenuBar();
+        Menu menuGame = new Menu("Game");
+        MenuItem menuExport = new MenuItem("Export game");
+        menuExport.setOnAction(event -> {});
+        MenuItem menuImport = new MenuItem("Import game");
+        menuImport.setOnAction(event -> {});
+        MenuItem menuLoad = new MenuItem("Load game state");
+        menuLoad.setOnAction(event -> {});
+        menuGame.getItems().addAll(menuExport, menuImport, menuLoad);
+        menuBar.getMenus().addAll(menuGame);
+
         BorderPane borderPane = new BorderPane();
 
         borderPane.setCenter(canvas);
         borderPane.setRight(ui);
-        borderPane.setTop(textUi);
+        borderPane.setTop(menuBar);
+        borderPane.setBottom(textUi);
 
         Scene scene = new Scene(borderPane);
+//        textUi.getChildren().addAll(menuBar);
         primaryStage.setScene(scene);
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
@@ -164,8 +175,10 @@ public class Main extends Application {
                 dy = 0;
                 break;
             case S:
-//                Player player = map.getPlayer();
-                dbManager.savePlayer(player);
+                if (keyEvent.isControlDown()) {
+//                    dbManager.savePlayer(player);
+                    modal.saveGameModal();
+                }
                 break;
             case H:
 //                Gson gson = new Gson();
@@ -221,7 +234,10 @@ public class Main extends Application {
 //                }catch(Exception e){System.out.println("create stream " + e);}
 //                System.out.println(this.player);
 
-                dbManager.getPlayer(player);
+                dbManager.savePlayer(player);
+                break;
+            case L:
+                System.out.println(MapSaver.saveMap(map));
                 break;
         }
 
@@ -234,6 +250,8 @@ public class Main extends Application {
         if (player.isWifeHappy()) win();
         refresh();
     }
+
+
 
     private void setupDbManager() {
         dbManager = new GameDatabaseManager();

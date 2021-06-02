@@ -63,7 +63,6 @@ public class Cell implements Drawable, Serializable {
         return type.getTileName();
     }
 
-
     public int getX() {
         return x;
     }
@@ -74,5 +73,17 @@ public class Cell implements Drawable, Serializable {
 
     public void setX(int x) {
         this.x = x;
+    }
+
+    public String getIcon() {
+        if (this.getItem() != null) {
+            return this.getItem().getTileName();
+        } else if (this.getEnvironment() != null) {
+            return this.getEnvironment().getTileName();
+        } else if (this.getActor() != null) {
+            return this.getActor().getTileName();
+        } else {
+            return this.getTileName();
+        }
     }
 }

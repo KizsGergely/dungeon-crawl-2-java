@@ -1,5 +1,7 @@
 package com.codecool.dungeoncrawl.logic;
 
+import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
+import com.codecool.dungeoncrawl.dao.PlayerDaoJdbc;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -9,6 +11,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ModalHandler {
+    PlayerDaoJdbc playerDao;
+
     public void saveGameModal() {
         TextField nameInput = new TextField("Name");
         Button save = new Button("Save");
@@ -22,26 +26,29 @@ public class ModalHandler {
         saveStage.setScene(saveScene);
         saveStage.show();
         save.setOnAction(event -> {
-
             // check if save_name exists
             String name = nameInput.getText();
-            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmAlert.setTitle("Save name already exists");
-            confirmAlert.setHeaderText(null);
-            confirmAlert.setContentText("Would you like to overwrite the already existing state?");
-            ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
-            ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
-            confirmAlert.getButtonTypes().setAll(yesButton, noButton);
-            confirmAlert.showAndWait().ifPresent(type -> {
-                if (type.getButtonData() == ButtonBar.ButtonData.YES) {
-                    System.out.println("yes");
-                    saveStage.close();
-                }
-                else {
-                    System.out.println("no");
-                    nameInput.requestFocus();
-                };
-            });
+            if (playerDao.checkIfPlayerNameExists(name)) {
+                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmAlert.setTitle("Save name already exists");
+                confirmAlert.setHeaderText(null);
+                confirmAlert.setContentText("Would you like to overwrite the already existing state?");
+                ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+                ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+                confirmAlert.getButtonTypes().setAll(yesButton, noButton);
+                confirmAlert.showAndWait().ifPresent(type -> {
+                    if (type.getButtonData() == ButtonBar.ButtonData.YES) {
+                        System.out.println("yes");
+                        saveStage.close();
+                    } else {
+                        System.out.println("no");
+                        nameInput.requestFocus();
+                    }
+                    ;
+                });
+            }
+
+            else {}  // TODO: save game from main
         });
         cancel.setOnAction(event -> saveStage.close());
     }

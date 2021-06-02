@@ -15,10 +15,19 @@ public class PlayerModel extends BaseModel {
     private int onLevel;
     private String inventory;
 
-    public PlayerModel(String playerName, int x, int y) {
+    public PlayerModel(String playerName, int hp, int attack, int defense, int x, int y,
+                       boolean isCatFed, boolean isGrassCut, int grassToCut, int onLevel, String inventory) {
         this.playerName = playerName;
+        this.hp = hp;
+        this.attack = attack;
+        this.defense = defense;
         this.x = x;
         this.y = y;
+        this.isCatFed = isCatFed;
+        this.isGrassCut = isGrassCut;
+        this.grassToCut = grassToCut;
+        this.onLevel = onLevel;
+        this.inventory = inventory;
     }
 
     public PlayerModel(Player player) {

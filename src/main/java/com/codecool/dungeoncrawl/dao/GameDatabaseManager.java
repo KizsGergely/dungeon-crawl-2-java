@@ -16,16 +16,19 @@ import java.sql.SQLException;
 
 public class GameDatabaseManager {
     private PlayerDao playerDao;
+    private GameStateDao gameStateDao;
     private String GameName = "GameName";
+    private PlayerModel playerModel;
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
         playerDao = new PlayerDaoJdbc(dataSource);
+        gameStateDao = new GameStateDaoJdbc(dataSource);
     }
 
     public void savePlayer(Player player) {
-        PlayerModel model = new PlayerModel(player);
-        playerDao.add(model);
+        playerModel = new PlayerModel(player);
+        playerDao.add(playerModel);
     }
 
     public void getPlayer(Player player) {
@@ -47,12 +50,10 @@ public class GameDatabaseManager {
         }
     }
 
-    public void saveGame(String saveName) {
-        String currentMap = "x";
-        String otherMap = "y";
-        Date savedAt;
-        PlayerModel player;
-        GameState gameState = new GameState(currentMap, otherMap, savedAt, player, saveName);
+    public void saveGame(String currentMap, String otherMap, Date savedAt, String saveName, Player player) {
+        savePlayer(player);
+        GameState gameState = new GameState(currentMap, otherMap, savedAt, playerModel, saveName);
+        gameStateDao.add(gameState);
     }
 
     private DataSource connect() throws SQLException {

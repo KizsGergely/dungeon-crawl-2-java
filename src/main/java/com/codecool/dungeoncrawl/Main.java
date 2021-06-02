@@ -26,8 +26,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
 import java.sql.SQLException;
+import java.sql.Date;
 import java.util.*;
 
 public class Main extends Application {
@@ -236,8 +236,10 @@ public class Main extends Application {
 //                }catch(Exception e){System.out.println("create stream " + e);}
 //                System.out.println(this.player);
 
-                dbManager.savePlayer(player);
-                dbManager.saveGame("cica");
+//                dbManager.savePlayer(player);
+                String currentMap = getCurrentMapAsString();
+                String otherMap = getOtherMapAsString();
+                dbManager.saveGame(currentMap, otherMap, new Date(System.currentTimeMillis()), "cica", player);
                 break;
             case L:
                 System.out.println(MapSaver.saveMap(map));
@@ -505,6 +507,14 @@ public class Main extends Application {
 //        Gson gson = new Gson();
 //        String json = gson.toJson(player);
 //        System.out.println(json);
+    }
+
+    private String getCurrentMapAsString() {
+        return MapSaver.saveMap(map);
+    }
+
+    private String getOtherMapAsString() {
+        return (level == 1) ? MapSaver.saveMap(map2) : MapSaver.saveMap(map1);
     }
 
 }

@@ -48,4 +48,12 @@ public class GameState extends BaseModel {
     public void setPlayer(PlayerModel player) {
         this.player = player;
     }
+
+    public String getSaveName() {
+        return saveName;
+    }
+
+    public void setSaveName(String saveName) {
+        this.saveName = saveName;
+    }
 }

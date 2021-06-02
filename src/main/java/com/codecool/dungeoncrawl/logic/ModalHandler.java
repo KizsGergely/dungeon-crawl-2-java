@@ -22,6 +22,7 @@ public class ModalHandler {
         saveStage.setScene(saveScene);
         saveStage.show();
         save.setOnAction(event -> {
+
             // check if save_name exists
             String name = nameInput.getText();
             Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);

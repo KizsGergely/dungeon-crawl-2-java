@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.dao;
 
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -10,10 +11,12 @@ import org.postgresql.ds.PGSimpleDataSource;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.sql.Date;
 import java.sql.SQLException;
 
 public class GameDatabaseManager {
     private PlayerDao playerDao;
+    private String GameName = "GameName";
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
@@ -42,7 +45,14 @@ public class GameDatabaseManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public void saveGame(String saveName) {
+        String currentMap = "x";
+        String otherMap = "y";
+        Date savedAt;
+        PlayerModel player;
+        GameState gameState = new GameState(currentMap, otherMap, savedAt, player, saveName);
     }
 
     private DataSource connect() throws SQLException {

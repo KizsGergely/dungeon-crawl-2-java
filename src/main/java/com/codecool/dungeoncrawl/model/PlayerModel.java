@@ -13,6 +13,7 @@ public class PlayerModel extends BaseModel {
     private boolean isGrassCut;
     private int grassToCut;
     private int onLevel;
+    private String inventory;
 
     public PlayerModel(String playerName, int x, int y) {
         this.playerName = playerName;
@@ -31,6 +32,7 @@ public class PlayerModel extends BaseModel {
         this.isGrassCut = player.isGrassCut();
         this.grassToCut = player.getGrassToCut();
         this.onLevel = player.getLevelNumber();
+        this.inventory = player.getInventoryAsString();
     }
 
 
@@ -112,5 +114,13 @@ public class PlayerModel extends BaseModel {
 
     public void setOnLevel(int onLevel) {
         this.onLevel = onLevel;
+    }
+
+    public String getInventoryAsString() {
+        return inventory;
+    }
+
+    public void setInventoryAsString(String inventory) {
+        this.inventory = inventory;
     }
 }

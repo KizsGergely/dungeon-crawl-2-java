@@ -16,7 +16,7 @@ public class PlayerDaoJdbc implements PlayerDao {
     @Override
     public void add(PlayerModel player) {
         try (Connection conn = dataSource.getConnection()) {
-            String sql = "INSERT INTO player (player_name, hp, attack, defense, x, y, is_cat_fed, is_grass_cut, grass_to_cut, on_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO player (player_name, hp, attack, defense, x, y, is_cat_fed, is_grass_cut, grass_to_cut, on_level, inventory) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, player.getPlayerName());
             statement.setInt(2, player.getHp());
@@ -28,6 +28,7 @@ public class PlayerDaoJdbc implements PlayerDao {
             statement.setBoolean(8, player.isGrassCut());
             statement.setInt(9, player.getGrassToCut());
             statement.setInt(10, player.getOnLevel());
+            statement.setString(11, player.getInventoryAsString());
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             resultSet.next();

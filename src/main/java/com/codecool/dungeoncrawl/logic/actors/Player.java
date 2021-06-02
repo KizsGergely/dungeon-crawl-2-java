@@ -196,5 +196,7 @@ public class Player extends Actor implements Serializable {
         this.name = name;
     }
 
-
+    public String getInventoryAsString() {
+        return inventory.toString();
+    }
 }

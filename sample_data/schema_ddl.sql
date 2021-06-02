@@ -23,7 +23,8 @@ CREATE TABLE public.player (
     is_cat_fed boolean NOT NULL,
     is_grass_cut boolean NOT NULL,
     grass_to_cut integer NOT NULL,
-    on_level integer NOT NULL
+    on_level integer NOT NULL,
+    inventory text NOT NULL
 );
 
 DROP TABLE IF EXISTS public.monster;

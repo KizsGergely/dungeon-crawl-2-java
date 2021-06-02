@@ -120,7 +120,9 @@ public class Main extends Application {
         MenuItem menuImport = new MenuItem("Import game");
         menuImport.setOnAction(event -> {});
         MenuItem menuLoad = new MenuItem("Load game state");
-        menuLoad.setOnAction(event -> {});
+        menuLoad.setOnAction(event -> {
+            System.out.println();
+        });
         menuGame.getItems().addAll(menuExport, menuImport, menuLoad);
         menuBar.getMenus().addAll(menuGame);
 
@@ -235,6 +237,7 @@ public class Main extends Application {
 //                System.out.println(this.player);
 
                 dbManager.savePlayer(player);
+                dbManager.saveGame("cica");
                 break;
             case L:
                 System.out.println(MapSaver.saveMap(map));

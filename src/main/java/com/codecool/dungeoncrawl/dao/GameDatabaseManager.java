@@ -56,6 +56,12 @@ public class GameDatabaseManager {
         gameStateDao.add(gameState);
     }
 
+    public void updateGame(String currentMap, String otherMap, Date savedAt, String saveName, Player player) {
+        savePlayer(player);
+        GameState gameState = new GameState(currentMap, otherMap, savedAt, playerModel, saveName);
+        gameStateDao.update(gameState, saveName);
+    }
+
     private DataSource connect() throws SQLException {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         String dbName = System.getenv("PSQL_DB_NAME");

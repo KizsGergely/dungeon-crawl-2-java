@@ -40,7 +40,7 @@ public class PlayerDaoJdbc implements PlayerDao {
     }
 
     @Override
-    public void update(PlayerModel player) {
+    public void update(PlayerModel player, int playerId) {
         try (Connection conn = dataSource.getConnection()) {
             String sql = "UPDATE player SET player_name = ?, hp = ?, attack = ?, defense = ?, x = ?, y = ?," +
                     " is_cat_fed = ?, is_grass_cut = ?, grass_to_cut = ?, on_level = ?, inventory = ? WHERE id = ?";
@@ -56,6 +56,7 @@ public class PlayerDaoJdbc implements PlayerDao {
             statement.setInt(9, player.getGrassToCut());
             statement.setInt(10, player.getOnLevel());
             statement.setString(11, player.getInventoryAsString());
+            statement.setInt(12, playerId);
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

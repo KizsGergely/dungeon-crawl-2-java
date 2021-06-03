@@ -178,7 +178,6 @@ public class Main extends Application {
                 break;
             case S:
                 if (keyEvent.isControlDown()) {
-//                    dbManager.savePlayer(player);
                     String currentMap = getCurrentMapAsString();
                     String otherMap = getOtherMapAsString();
                     modal.saveGameModal(dbManager, currentMap, otherMap, player);
@@ -238,13 +237,11 @@ public class Main extends Application {
 //                }catch(Exception e){System.out.println("create stream " + e);}
 //                System.out.println(this.player);
 
-//                dbManager.savePlayer(player);
-                String currentMap = getCurrentMapAsString();
-                String otherMap = getOtherMapAsString();
-                dbManager.saveGame(currentMap, otherMap, new Date(System.currentTimeMillis()), "cica", player);
-                break;
             case L:
                 System.out.println(MapSaver.saveMap(map));
+                break;
+            case I:
+                modal.loadGameModal();
                 break;
         }
 

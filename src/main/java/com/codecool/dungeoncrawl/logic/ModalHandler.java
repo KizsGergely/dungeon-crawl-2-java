@@ -14,8 +14,6 @@ import javafx.stage.Stage;
 import java.sql.Date;
 
 public class ModalHandler {
-//    GameDatabaseManager dbManager;
-
 
     public void saveGameModal(GameDatabaseManager dbManager, String currentMap, String otherMap, Player player) {
         TextField nameInput = new TextField("Name");
@@ -31,32 +29,34 @@ public class ModalHandler {
         saveStage.show();
         save.setOnAction(event -> {
             // check if save_name exists
-            String saveName = nameInput.getText();
-            if (dbManager.checkIfSaveNameExists(saveName)) {
-                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmAlert.setTitle("Save name already exists");
-                confirmAlert.setHeaderText(null);
-                confirmAlert.setContentText("Would you like to overwrite the already existing state?");
-                ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
-                ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
-                confirmAlert.getButtonTypes().setAll(yesButton, noButton);
-                confirmAlert.showAndWait().ifPresent(type -> {
-                    if (type.getButtonData() == ButtonBar.ButtonData.YES) {
-                        System.out.println("yes");
-                        saveStage.close();
-                    } else {
-                        System.out.println("no");
-                        nameInput.requestFocus();
-                    }
-                    ;
-                });
-            }
-
-            else {
-                dbManager.saveGame(currentMap, otherMap, new Date(System.currentTimeMillis()), saveName, player);
-            }
+            checkSaveName(dbManager, currentMap, otherMap, player, nameInput, saveStage);
         });
         cancel.setOnAction(event -> saveStage.close());
+    }
+
+    private void checkSaveName(GameDatabaseManager dbManager, String currentMap, String otherMap, Player player, TextField nameInput, Stage saveStage) {
+        nameInput.requestFocus();
+        String saveName = nameInput.getText();
+        if (dbManager.checkIfSaveNameExists(saveName)) {
+            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmAlert.setTitle("Save name already exists");
+            confirmAlert.setHeaderText(null);
+            confirmAlert.setContentText("Would you like to overwrite the already existing state?");
+            ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+            ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+            confirmAlert.getButtonTypes().setAll(yesButton, noButton);
+            confirmAlert.showAndWait().ifPresent(type -> {
+                if (type.getButtonData() == ButtonBar.ButtonData.YES) {
+                    dbManager.updateGame(currentMap, otherMap, new Date(System.currentTimeMillis()), saveName, player);
+                    saveStage.close();
+                } else {
+                    confirmAlert.close();  //TODO
+                    checkSaveName(dbManager, currentMap, otherMap, player, nameInput, saveStage);
+                    }
+            });
+        } else {
+            dbManager.saveGame(currentMap, otherMap, new Date(System.currentTimeMillis()), saveName, player);
+        }
     }
 
     public void loadGameModal() {

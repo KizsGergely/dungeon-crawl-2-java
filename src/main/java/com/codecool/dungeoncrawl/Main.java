@@ -179,7 +179,9 @@ public class Main extends Application {
             case S:
                 if (keyEvent.isControlDown()) {
 //                    dbManager.savePlayer(player);
-                    modal.saveGameModal();
+                    String currentMap = getCurrentMapAsString();
+                    String otherMap = getOtherMapAsString();
+                    modal.saveGameModal(dbManager, currentMap, otherMap, player);
                 }
                 break;
             case H:

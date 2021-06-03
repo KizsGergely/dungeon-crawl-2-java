@@ -2,6 +2,7 @@ package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
 import com.codecool.dungeoncrawl.dao.PlayerDaoJdbc;
+import com.codecool.dungeoncrawl.logic.actors.Player;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -10,10 +11,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class ModalHandler {
-    PlayerDaoJdbc playerDao;
+import java.sql.Date;
 
-    public void saveGameModal() {
+public class ModalHandler {
+//    GameDatabaseManager dbManager;
+
+
+    public void saveGameModal(GameDatabaseManager dbManager, String currentMap, String otherMap, Player player) {
         TextField nameInput = new TextField("Name");
         Button save = new Button("Save");
         Button cancel = new Button("Cancel");
@@ -27,8 +31,8 @@ public class ModalHandler {
         saveStage.show();
         save.setOnAction(event -> {
             // check if save_name exists
-            String name = nameInput.getText();
-            if (playerDao.checkIfPlayerNameExists(name)) {
+            String saveName = nameInput.getText();
+            if (dbManager.checkIfSaveNameExists(saveName)) {
                 Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
                 confirmAlert.setTitle("Save name already exists");
                 confirmAlert.setHeaderText(null);
@@ -48,7 +52,9 @@ public class ModalHandler {
                 });
             }
 
-            else {}  // TODO: save game from main
+            else {
+                dbManager.saveGame(currentMap, otherMap, new Date(System.currentTimeMillis()), saveName, player);
+            }
         });
         cancel.setOnAction(event -> saveStage.close());
     }

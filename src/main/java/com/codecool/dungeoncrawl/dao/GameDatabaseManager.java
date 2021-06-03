@@ -11,17 +11,17 @@ import org.postgresql.ds.PGSimpleDataSource;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.sql.Date;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class GameDatabaseManager {
     private PlayerDao playerDao;
     private GameStateDao gameStateDao;
     private String GameName = "GameName";
     private PlayerModel playerModel;
+    private DataSource dataSource;
 
     public void setup() throws SQLException {
-        DataSource dataSource = connect();
+        dataSource = connect();
         playerDao = new PlayerDaoJdbc(dataSource);
         gameStateDao = new GameStateDaoJdbc(dataSource);
     }
@@ -71,5 +71,18 @@ public class GameDatabaseManager {
         System.out.println("Connection ok.");
 
         return dataSource;
+    }
+
+    public boolean checkIfSaveNameExists(String name) {
+        try (Connection conn = dataSource.getConnection()) {
+            String sql = "SELECT count(1) > 0 FROM game_state WHERE save_name = ?";
+            PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getBoolean(1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

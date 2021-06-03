@@ -84,15 +84,19 @@ public class Player extends Actor implements Serializable {
     public void pickupItem() {
         Item item = cell.getItem();
         if (item instanceof Apple || item instanceof Pear) health += 4;
-        else if (item instanceof Carrot) health += 3;
-        else if (item instanceof Cheese || item instanceof Bread) health += 2;
+        if (item instanceof Carrot) health += 3;
+        if (item instanceof Cheese || item instanceof Bread) health += 2;
+
+        if (item instanceof Knife) attack += 3;
+
         if (item instanceof CellarKey) inventory.pickupCellarKey();
         if (item instanceof GardenKey) inventory.pickupGardenKey();
-        if (item instanceof Ring) hasRing = true;
-        if (item instanceof Knife) attack += 3;
+
         if (inventory.hasCellarKey()) hasCellarKey = true;
         if (inventory.hasGardenKey()) hasGardenKey = true;
+
         if (item instanceof Torch) hasTorch = true;
+        if (item instanceof Ring) hasRing = true;
         // if player collects food, it increases health but won't be in inventory
         if (!item.isFood()) {
             inventory.addItem(item);

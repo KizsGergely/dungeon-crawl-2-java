@@ -1,8 +1,7 @@
 package com.codecool.dungeoncrawl.logic.items;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Inventory implements Serializable {
     private HashMap<String, Integer> inventory = new HashMap<>();
@@ -10,6 +9,11 @@ public class Inventory implements Serializable {
     private boolean hasGardenKey = false;
 
     public Inventory() {
+    }
+
+    public Inventory(HashMap inventoryHashMap) {
+
+        this.inventory = inventoryHashMap;
     }
 
     public void addItem(Item item) {
@@ -51,6 +55,33 @@ public class Inventory implements Serializable {
 
     public boolean hasGardenKey() { return hasGardenKey; }
 
+    public boolean checkCellarKey() {
+        for (Map.Entry<String, Integer> item: inventory.entrySet()) {
+            if (item.getKey().equals("cellar key")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkGardenKey() {
+        for (Map.Entry<String, Integer> item: inventory.entrySet()) {
+            if (item.getKey().equals("garden key")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkIfHasTorch() {
+        for (Map.Entry<String, Integer> item: inventory.entrySet()) {
+            if (item.getKey().equals("torch")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void pickupCellarKey() { hasCellarKey = true; }
 
     public void pickupGardenKey() { hasGardenKey = true; }
@@ -62,5 +93,19 @@ public class Inventory implements Serializable {
             sb.append("- ").append(item).append(": ").append(inventory.get(item)).append("\n");
         }
         return sb.toString();
+    }
+
+    public HashMap<String, Integer> generateInventory(String inventoryString) {
+        HashMap<String, Integer> inventoryHashmap  = new HashMap<>();
+        String[] inventoryAsList = inventoryString.split("\n");
+        if (!inventoryString.equals("")){
+            for (String substring: inventoryAsList) {
+                substring = substring.replace("- ", "");
+                String[] substringParts = substring.split(": ");
+                inventoryHashmap.put(substringParts[0], Integer.parseInt(substringParts[1]));
+            }
+        }
+
+        return inventoryHashmap;
     }
 }

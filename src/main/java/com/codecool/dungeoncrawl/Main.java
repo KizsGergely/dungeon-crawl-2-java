@@ -122,7 +122,7 @@ public class Main extends Application {
         menuImport.setOnAction(event -> {});
         MenuItem menuLoad = new MenuItem("Load game state");
         menuLoad.setOnAction(event -> {
-            System.out.println("asda");
+            loadGame();
         });
         menuGame.getItems().addAll(menuExport, menuImport, menuLoad);
         menuBar.getMenus().addAll(menuGame);
@@ -184,73 +184,7 @@ public class Main extends Application {
                     modal.saveGameModal(dbManager, currentMap, otherMap, player);
                 }
                 break;
-            case H:
-//                Gson gson = new Gson();
-//                String json = gson.toJson(this.player);
-//                System.out.println(json);
-//                try (FileWriter writer = new FileWriter("staff.json")) {
-//                    gson.toJson(this.player, writer);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-
-//                ObjectMapper mapper = new ObjectMapper();
-//                mapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
-//                String jsonResult = null;
-//                try {
-//                    jsonResult = mapper.writeValueAsString(this.player);
-//                } catch (JsonProcessingException e) {
-//                    e.printStackTrace();
-//                }
-//                System.out.println(jsonResult);
-
-
-
-//                System.out.println(this.player);
-//                try{
-//                    //Creating the object
-//                    //Creating stream and writing the object
-//                    FileOutputStream fout=new FileOutputStream("f.txt");
-//                    ObjectOutputStream out=new ObjectOutputStream(fout);
-//                    out.writeObject(player);
-//                    out.flush();
-//                    //closing the stream
-//                    out.close();
-//                    System.out.println("success");
-//                }catch(Exception e){System.out.println("create object " + e);}
-//
-//                try{
-//                    //Creating stream to read the object
-//                    ObjectInputStream in=new ObjectInputStream(new FileInputStream("f.txt"));
-//                    Player s=(Player)in.readObject();
-//                    //printing the data of the serialized object
-//                    System.out.println(s.getName());
-//                    this.player = s;
-//                    map.setPlayer(this.player);
-//                    System.out.println("set player");
-//                    map.setCell(this.player, this.player.getX(), this.player.getY());
-//                    System.out.println("set map cell");
-//                    this.player.setCell(map.getCell(this.player.getX(), this.player.getY()));
-//                    System.out.println("set player cell");
-//
-//                    //closing the stream
-//                    in.close();
-//                }catch(Exception e){System.out.println("create stream " + e);}
-//                System.out.println(this.player);
-
-            case L:
-                System.out.println(MapSaver.saveMap(map));
-                break;
-            case I:
-                List<GameState> load = dbManager.loadAllGame();
-                System.out.println(load);
-                System.out.println(load.size());
-                break;
-            case M:
-                modal.loadGameModal(dbManager);
-                break;
         }
-
 
         player.attackIfEncounter(dx, dy);
         removeMonstersIfDead(ghosts, scrubs);
@@ -261,7 +195,22 @@ public class Main extends Application {
         refresh();
     }
 
-
+    private void loadGame() {
+        modal.loadGameModal(dbManager);
+        int gameId = 4;
+        GameState gameState = dbManager.loadGame(gameId);
+        map = MapLoaderByString.loadMap(gameState.getCurrentMap());
+        Cell playerCell = map.getPlayer().getCell();
+        map.setPlayer(null);
+        player = dbManager.loadPlayer(gameState.getPlayer().getId());
+        map.setCell(player, player.getLoadedX(), player.getLoadedY());
+        player.setCell(playerCell);
+        map.setPlayer(player);
+        groupMonsters();
+        moveMonsters();
+        player.setGrassToCut(map.getGrassCounter());
+        refresh();
+    }
 
     private void setupDbManager() {
         dbManager = new GameDatabaseManager();
@@ -363,7 +312,6 @@ public class Main extends Application {
     }
 
     private void refresh() {
-//        context.setFill(Color.BLACK);
         context.setFill(Color.color(0.278431373F,0.176470588F,0.235294118F));
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
@@ -499,7 +447,7 @@ public class Main extends Application {
     private void playerNameCheck() {
         ArrayList<String> developers = new ArrayList<>();
         developers.add("allisC");
-        developers.add("ireG");
+        developers.add("sziK");
         developers.add("iloZ");
         boolean isDev = developers.contains(player.getName());
         if (isDev) player.makeWifeHappy();

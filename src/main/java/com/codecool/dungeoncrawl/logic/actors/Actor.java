@@ -22,6 +22,9 @@ public abstract class Actor implements Drawable, Serializable {
         this.cell.setActor(this);
     }
 
+    protected Actor() {
+    }
+
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (nextCell.getType() != CellType.WALL &&
@@ -93,4 +96,6 @@ public abstract class Actor implements Drawable, Serializable {
     }
 
     public void setX(int position) { cell.setX(position); }
+
+    public void setY(int position) { cell.setY(position); }
 }

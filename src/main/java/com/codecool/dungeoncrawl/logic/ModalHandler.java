@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
 import com.codecool.dungeoncrawl.dao.PlayerDaoJdbc;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.model.GameState;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -16,6 +17,7 @@ import java.sql.Date;
 import java.util.List;
 
 public class ModalHandler {
+    private int gameId;
 
     public void saveGameModal(GameDatabaseManager dbManager, String currentMap, String otherMap, Player player) {
         TextField nameInput = new TextField("Name");
@@ -81,10 +83,6 @@ public class ModalHandler {
             tableView.getItems().add(gs);
         }
 
-        TableView.TableViewSelectionModel selectionModel = tableView.getSelectionModel();
-        selectionModel.setSelectionMode(SelectionMode.SINGLE);
-        ObservableList<Integer> selectedIndices = selectionModel.getSelectedIndices();
-        System.out.println(selectedIndices);
         VBox layout = new VBox(tableView);
         layout.setPadding(new Insets(10, 10, 10, 10));
         Scene loadScene = new Scene(layout, 500, 300);
@@ -92,6 +90,19 @@ public class ModalHandler {
         loadStage.setTitle("Load game state");
         loadStage.setScene(loadScene);
         loadStage.show();
+        TableView.TableViewSelectionModel selectionModel = tableView.getSelectionModel();
+        selectionModel.setSelectionMode(SelectionMode.SINGLE);
+        ObservableList<GameState> selectedItems = selectionModel.getSelectedItems();
+
+        selectedItems.addListener(new ListChangeListener<GameState>() {
+            @Override
+            public void onChanged(Change<? extends GameState> change) {
+                gameId = change.getList().get(0).getGameId();
+            }
+        });
     }
 
+    public int getGameId() {
+        return gameId;
+    }
 }

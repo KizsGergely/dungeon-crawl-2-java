@@ -33,6 +33,11 @@ public class GameDatabaseManager {
         playerDao.add(playerModel);
     }
 
+    public Player loadPlayer(int id) {
+        playerModel = playerDao.get(id);
+        return new Player(playerModel);
+    }
+
     public void savePlayerToJson(PlayerModel playerModel) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
@@ -79,8 +84,8 @@ public class GameDatabaseManager {
         gameStateDao.update(gameState, saveName);
     }
 
-    public GameState loadGame() {
-        return gameStateDao.get(1);
+    public GameState loadGame(int gameId) {
+        return gameStateDao.get(gameId);
     }
 
     public List<GameState> loadAllGame() {

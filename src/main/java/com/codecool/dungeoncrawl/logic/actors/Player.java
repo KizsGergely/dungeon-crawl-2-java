@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.*;
 import com.codecool.dungeoncrawl.logic.environment.*;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 
 import java.io.Serializable;
 
@@ -24,10 +25,30 @@ public class Player extends Actor implements Serializable {
     private boolean hasRing = false;
     private boolean isWifeHappy = false;
     private boolean isCatFed = false;
+    private int loadedX;
+    private int loadedY;
 
     public Player(Cell cell) {
         super(cell);
         name = "Player";
+    }
+
+    public Player(PlayerModel playerModel) {
+        this.name = playerModel.getPlayerName();
+        this.health = playerModel.getHp();
+        this.attack = playerModel.getAttack();
+        this.defense = playerModel.getDefense();
+        this.loadedX = playerModel.getX();
+        this.loadedY = playerModel.getY();
+        this.isGrassCut = playerModel.isGrassCut();
+        this.grassToCut = playerModel.getGrassToCut();
+        this.onLevel = playerModel.getOnLevel();
+        this.isCatFed = playerModel.isCatFed();
+        this.inventory = new Inventory(inventory.generateInventory(playerModel.getInventoryAsString()));
+        if (inventory.checkCellarKey()) hasCellarKey = true;
+        if (inventory.checkGardenKey()) hasGardenKey = true;
+        if (inventory.hasRing()) hasRing = true;
+        if (inventory.checkIfHasTorch()) hasTorch = true;
     }
 
     public String getTileName() {
@@ -198,5 +219,13 @@ public class Player extends Actor implements Serializable {
 
     public String getInventoryAsString() {
         return inventory.toString();
+    }
+
+    public int getLoadedX() {
+        return loadedX;
+    }
+
+    public int getLoadedY() {
+        return loadedY;
     }
 }

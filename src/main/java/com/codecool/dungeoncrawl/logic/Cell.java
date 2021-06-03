@@ -75,6 +75,10 @@ public class Cell implements Drawable, Serializable {
         this.x = x;
     }
 
+    public void setY(int y) {
+        this.y = y;
+    }
+
     public String getIcon() {
         if (this.getItem() != null) {
             return this.getItem().getTileName();

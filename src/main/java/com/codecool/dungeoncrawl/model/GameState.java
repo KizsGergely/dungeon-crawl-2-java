@@ -3,9 +3,10 @@ package com.codecool.dungeoncrawl.model;
 import java.sql.Date;
 
 public class GameState extends BaseModel {
-    private Date savedAt;
+    private int gameId;
     private String currentMap;
     private String otherMap;
+    private Date savedAt;
     private PlayerModel player;
     private String saveName;
 
@@ -14,6 +15,20 @@ public class GameState extends BaseModel {
         this.otherMap = otherMap;
         this.savedAt = savedAt;
         this.player = player;
+        this.saveName = saveName;
+    }
+
+    public GameState(int gameId, String currentMap, String otherMap, Date savedAt, PlayerModel player, String saveName) {
+        this.gameId = gameId;
+        this.currentMap = currentMap;
+        this.otherMap = otherMap;
+        this.savedAt = savedAt;
+        this.player = player;
+        this.saveName = saveName;
+    }
+
+    public GameState(int gameId, String saveName) {
+        this.gameId = gameId;
         this.saveName = saveName;
     }
 
@@ -55,5 +70,14 @@ public class GameState extends BaseModel {
 
     public void setSaveName(String saveName) {
         this.saveName = saveName;
+    }
+
+    @Override
+    public String toString() {
+        return "gameId: " + this.gameId + " saveName: " + this.saveName;
+    }
+
+    public int getGameId() {
+        return gameId;
     }
 }

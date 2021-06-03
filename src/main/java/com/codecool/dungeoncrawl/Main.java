@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.model.GameState;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -121,7 +122,7 @@ public class Main extends Application {
         menuImport.setOnAction(event -> {});
         MenuItem menuLoad = new MenuItem("Load game state");
         menuLoad.setOnAction(event -> {
-            System.out.println();
+            System.out.println("asda");
         });
         menuGame.getItems().addAll(menuExport, menuImport, menuLoad);
         menuBar.getMenus().addAll(menuGame);
@@ -241,7 +242,12 @@ public class Main extends Application {
                 System.out.println(MapSaver.saveMap(map));
                 break;
             case I:
-                modal.loadGameModal();
+                List<GameState> load = dbManager.loadAllGame();
+                System.out.println(load);
+                System.out.println(load.size());
+                break;
+            case M:
+                modal.loadGameModal(dbManager);
                 break;
         }
 

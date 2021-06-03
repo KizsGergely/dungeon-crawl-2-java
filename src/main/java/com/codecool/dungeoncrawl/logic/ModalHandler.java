@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl.logic;
 import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
 import com.codecool.dungeoncrawl.dao.PlayerDaoJdbc;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.model.GameState;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -12,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.sql.Date;
+import java.util.List;
 
 public class ModalHandler {
 
@@ -59,23 +61,25 @@ public class ModalHandler {
         }
     }
 
-    public void loadGameModal() {
+    public void loadGameModal(GameDatabaseManager dbManager) {
+        List<GameState> gameStates = dbManager.loadAllGameIdAndName();
         TableView tableView = new TableView();
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        TableColumn<String, String> column1 = new TableColumn<>("State name");
-        column1.setCellValueFactory(new PropertyValueFactory<>("name"));  //field
+        TableColumn<GameState, String> column1 = new TableColumn<>("Id");
+        column1.setCellValueFactory(new PropertyValueFactory<>("gameId"));  //field
 
-        TableColumn<String, String> column2 = new TableColumn<>("Saved at");
-        column2.setCellValueFactory(new PropertyValueFactory<>("date"));
+        TableColumn<GameState, String> column2 = new TableColumn<>("Save name");
+        column2.setCellValueFactory(new PropertyValueFactory<>("saveName"));
 
         tableView.setPlaceholder(new Label("No saves to display"));
 
         tableView.getColumns().add(column1);
         tableView.getColumns().add(column2);
 
-        tableView.getItems().add("x");  //object
-        tableView.getItems().add("y");
+        for (GameState gs : gameStates) {
+            tableView.getItems().add(gs);
+        }
 
         TableView.TableViewSelectionModel selectionModel = tableView.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.SINGLE);

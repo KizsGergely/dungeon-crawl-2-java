@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.util.List;
 
 public class GameDatabaseManager {
     private PlayerDao playerDao;
@@ -19,11 +20,12 @@ public class GameDatabaseManager {
     private String GameName = "GameName";
     private PlayerModel playerModel;
     private DataSource dataSource;
+    private GameState gameState;
 
     public void setup() throws SQLException {
         dataSource = connect();
         playerDao = new PlayerDaoJdbc(dataSource);
-        gameStateDao = new GameStateDaoJdbc(dataSource);
+        gameStateDao = new GameStateDaoJdbc(dataSource, playerDao);
     }
 
     public void savePlayer(Player player) {
@@ -31,20 +33,35 @@ public class GameDatabaseManager {
         playerDao.add(playerModel);
     }
 
-    public void getPlayer(Player player) {
-        PlayerModel model = new PlayerModel(player);
-        model.setId(1);  // change
+    public void savePlayerToJson(PlayerModel playerModel) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
         String jsonResult = null;
         try {
-            jsonResult = mapper.writeValueAsString(model);
+            jsonResult = mapper.writeValueAsString(playerModel);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         System.out.println(jsonResult);
         try {
-            mapper.writeValue(Paths.get("playermodel.json").toFile(), model);
+            mapper.writeValue(Paths.get(playerModel.getPlayerName() + ".json").toFile(), playerModel);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveGameStateToJson(GameState gameState) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
+        String jsonResult = null;
+        try {
+            jsonResult = mapper.writeValueAsString(gameState);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        System.out.println(jsonResult);
+        try {
+            mapper.writeValue(Paths.get(gameState.getSaveName() + ".json").toFile(), gameState);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,6 +77,18 @@ public class GameDatabaseManager {
         savePlayer(player);
         GameState gameState = new GameState(currentMap, otherMap, savedAt, playerModel, saveName);
         gameStateDao.update(gameState, saveName);
+    }
+
+    public GameState loadGame() {
+        return gameStateDao.get(1);
+    }
+
+    public List<GameState> loadAllGame() {
+        return gameStateDao.getAll();
+    }
+
+    public List<GameState> loadAllGameIdAndName() {
+        return gameStateDao.getAll();
     }
 
     private DataSource connect() throws SQLException {
